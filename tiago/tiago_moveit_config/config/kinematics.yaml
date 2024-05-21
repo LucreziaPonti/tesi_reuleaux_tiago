@@ -1,2 +1,2 @@
 arm_torso:
-  kinematics_solver: tiago_arm_torso_kinematics/IKFastKinematicsPlugin
+  kinematics_solver: tiago_arm_torso/IKFastKinematicsPlugin
