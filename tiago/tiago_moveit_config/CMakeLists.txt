@@ -1,10 +1,13 @@
-cmake_minimum_required(VERSION 3.1.3)
+cmake_minimum_required(VERSION 2.8.3)
 project(tiago_moveit_config)
 
 find_package(catkin REQUIRED)
 
 catkin_package()
 
-install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-  PATTERN "setup_assistant.launch" EXCLUDE)
-install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+        PATTERN "disable_collisions" EXCLUDE
+        PATTERN "end_effectors" EXCLUDE
+        PATTERN "scripts" EXCLUDE
+)
