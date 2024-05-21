@@ -2,7 +2,10 @@ moveit_setup_assistant_config:
   URDF:
     package: tiago_description
     relative_path: robots/tiago.urdf.xacro
+    xacro_args: end_effector:=pal-gripper
   SRDF:
-    relative_path: config/srdf/tiago.srdf.xacro
+    relative_path: config/tiago.srdf
   CONFIG:
-    generated_timestamp: 1416393279
+    author_name: lucrezia
+    author_email: lucrezia.ponti2@studio.unibo.it
+    generated_timestamp: 1713697117
