@@ -1,0 +1,1 @@
+rosrun moveit_kinematics create_ikfast_moveit_plugin.py tiago arm_torso tiago_ikfast_arm_torso_plugin /home/lucr_wsl_16/catkin_ws/src/tiago_ikfast_arm_torso_plugin/src/tiago_arm_torso_ikfast_solver.cpp
