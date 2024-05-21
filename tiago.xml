@@ -1,6 +1,0 @@
-<robot file="tiago.dae">
-    <Manipulator name="tiago">
-      <base>torso_lift_link</base>
-      <effector>arm_tool_link</effector>
-    </Manipulator>
-</robot>
