@@ -2,7 +2,7 @@
 <launch>
 
 <arg name = "moveit_pkg" default="tiago_moveit_config"/>
-<arg name = "kinematics" default="kdl "/> <!--DA MODIFICARE A IKFAST-->
+<arg name = "kinematics" default="ik_fast "/> <!--DA MODIFICARE quando necessario-->
 
 <!--Launch moveit required pkgs for your -->
 <include file="$(find base_placement_plugin)/launch/moveit_pkgs.launch">
