@@ -126,7 +126,7 @@ void PlaceBase::getSelectedOpType(int op_index)
   */
   selected_op_type_ = op_index;
   ROS_INFO_STREAM("selected visualization method: " << output_type_[op_index]);
-  if(selected_op_type_==1 || selected_op_type_==2)
+  if(selected_op_type_==1 || selected_op_type_==2) // arm or robot_model
   {
     if(!checkforRobotModel())
     {
@@ -149,7 +149,7 @@ bool PlaceBase::checkforRobotModel()
       ROS_INFO("Please select your manipulator group. ");
       return true;
     }
-    return false;
+    //return false; //messo io per provare 
    }
   else
     return true;
