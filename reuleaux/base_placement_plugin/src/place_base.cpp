@@ -149,6 +149,7 @@ bool PlaceBase::checkforRobotModel()
       ROS_INFO("Please select your manipulator group. ");
       return true;
     }
+    return false;
    }
   else
     return true;
@@ -384,7 +385,7 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
   if (grasp_poses.size() == 0)
     ROS_ERROR_STREAM("Please provide atleast one grasp pose.");
 
-  else if(selected_method_ == 4)
+  else if(selected_method_ == 4) //metodo user intuition - non gli serve controllare l'inverse reachability prima di fare baseplace... (I guess)
   {
     GRASP_POSES_ = grasp_poses;
     BasePlaceMethodHandler();
@@ -426,10 +427,10 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
       final_base_poses.clear();
       GRASP_POSES_ = grasp_poses;
 
-      if(selected_method_ == 3)
+      if(selected_method_ == 3) // findBaseByVerticalRobotModel - devo estendere alla base del robot (dalla base del braccio)
       {
         transformToRobotbase(PoseColFilter, robot_PoseColfilter);
-        sd.associatePose(baseTrnsCol, grasp_poses, robot_PoseColfilter, res);
+        sd.associatePose(baseTrnsCol, grasp_poses, robot_PoseColfilter, res); //create a point cloud which consists of all of the possible base locations for all grasp poses and a list of base pose orientations
         ROS_INFO("Size of baseTrnsCol dataset: %lu", baseTrnsCol.size());
         createSpheres(baseTrnsCol, sphereColor, highScoreSp, true);
       }
@@ -463,8 +464,8 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
                  pitch, yaw);
       }
 
-      // showBaseLocations(final_base_poses);
-      OuputputVizHandler(final_base_poses);
+      // showBaseLocations(final_base_poses); //outdated function
+      OuputputVizHandler(final_base_poses);  // function to have different showBaseLocations methods
     }
   }
 

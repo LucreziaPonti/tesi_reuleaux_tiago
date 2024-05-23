@@ -165,7 +165,7 @@ void CreateMarker::createInteractiveMarker(const geometry_msgs::Pose& base_pose,
   iMarker.pose = base_pose;
   iMarker.scale = 0.2;
   std::string name = "robot_model";
-  std::string description = "robot_desc";
+  std::string description = "robot_description"; //perchè non è scritto robot_description??
   iMarker.name = name + boost::lexical_cast<std::string>(num);
   iMarker.description = description+boost::lexical_cast<std::string>(num);
   visualization_msgs::InteractiveMarkerControl robotModelControl;
