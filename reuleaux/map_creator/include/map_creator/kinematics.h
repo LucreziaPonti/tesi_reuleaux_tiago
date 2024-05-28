@@ -4,7 +4,7 @@
 
 #define IK_VERSION 61
 //#include "mh5_ikfast.cpp"
-#include "tiago_arm_torso_ikfast_solver.cpp"
+#include "tiago_arm_ikfast_solver.cpp"
 //#include "abb_irb2400_manipulator_ikfast_solver.cpp"
 //#include "ur5_ikfast.cpp"
 
