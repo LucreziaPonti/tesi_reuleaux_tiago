@@ -2,7 +2,7 @@ export IK_SOLVER= ik_fast
 
 source ./devel/setup.bash
 
-chmod +x ./src/tesi_reuleaux_tiago/base_placement_plugin/scripts/helper.bash
+chmod +x ./src/tesi_reuleaux_tiago/reuleaux/base_placement_plugin/scripts/helper.bash
 
 roslaunch tiago_gazebo tiago_gazebo.launch public_sim:=true end_effector:=pal-gripper
 
