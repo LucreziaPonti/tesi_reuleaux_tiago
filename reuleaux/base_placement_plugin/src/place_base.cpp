@@ -149,8 +149,7 @@ bool PlaceBase::checkforRobotModel()
       Q_EMIT sendGroupType_signal(group_names_);
       ROS_INFO("Please select your manipulator group. ");
       return true;
-    }
-    //return false; //messo io per provare 
+    } 
    }
   else
     return true;
@@ -804,7 +803,7 @@ void PlaceBase::showBaseLocationsbyArrow(std::vector< geometry_msgs::Pose > po)
   {
     ROS_INFO("debug---------------------------------------------------------------MARKER ARRAY %d",i);
     visualization_msgs::Marker marker;
-    marker.header.frame_id = "base_link";
+    marker.header.frame_id = "base_footprint";
     marker.header.stamp = ros::Time::now();
     marker.ns = "points";
     marker.action = visualization_msgs::Marker::ADD;
@@ -930,7 +929,7 @@ void PlaceBase::ShowUnionMap(bool show_map)
     ros::Publisher workspace_pub = n.advertise< map_creator::WorkSpace >("reachability_map", 1);
     map_creator::WorkSpace ws;
     ws.header.stamp = ros::Time::now();
-    ws.header.frame_id = "base_link";
+    ws.header.frame_id = "base_footprint";
     ws.resolution = res;
 
     for (std::multimap< std::vector< double >, double >::iterator it = sphereColor.begin(); it != sphereColor.end(); ++it)

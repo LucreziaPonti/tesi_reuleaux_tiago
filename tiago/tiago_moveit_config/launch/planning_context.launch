@@ -4,7 +4,7 @@
   <arg name="load_robot_description" default="false"/>
 
   <!-- Selection of kinematics solver -->
-  <arg name="kinematics" value="$(optenv IK_SOLVER kdl)" />
+  <arg name="kinematics" value="$(optenv IK_SOLVER ik_fast)" />
 
   <!-- The name of the parameter under which the URDF is loaded -->
   <arg name="robot_description" default="robot_description"/>
