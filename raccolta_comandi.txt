@@ -1,4 +1,4 @@
-export IK_SOLVER= ik_fast
+export IK_SOLVER="ik_fast"
 
 source ./devel/setup.bash
 

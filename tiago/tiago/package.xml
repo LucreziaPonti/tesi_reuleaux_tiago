@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<package>
+  <name>tiago</name>
+  <version>0.0.0</version>
+  <description>tiago metapackage</description>
+  <maintainer email="lucrezia.ponti2@studio.unibo.it">Lucrezia</maintainer>
+  <author email="lucrezia.ponti2@studio.unibo.it">Lucrezia</author>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <run_depend>aruco_ros</run_depend>
+  <run_depend>backward_ros</run_depend>
+  <run_depend>custom_end_effector</run_depend>
+  <run_depend>ddynamic_reconfigure_python</run_depend>
+  <run_depend>dynamic_introspection</run_depend>
+  <run_depend>eband_local_planner</run_depend>
+  <run_depend>gazebo_ros_pkgs</run_depend>
+  <run_depend>head_action</run_depend>
+  <run_depend>hey5_description</run_depend>
+  <run_depend>humanoid_msgs</run_depend>
+  <run_depend>navigation_layers</run_depend>
+  <run_depend>omni_base_navigation</run_depend>
+  <run_depend>omni_base_robot</run_depend>
+  <run_depend>omni_base_simulation</run_depend>
+  <run_depend>openslam_gmapping</run_depend>
+  <run_depend>pal_gazebo_plugins</run_depend>
+  <run_depend>pal_gazebo_worlds</run_depend>
+  <run_depend>pal_gripper</run_depend>
+  <run_depend>pal_hardware_gazebo</run_depend>
+  <run_depend>pal_hardware_interfaces</run_depend>
+  <run_depend>pal_motion_loader</run_depend>
+  <run_depend>pal_msgs</run_depend>
+  <run_depend>pal_navigation_cfg_public</run_depend>
+  <run_depend>pal_navigation_sm</run_depend>
+  <run_depend>pal_python</run_depend>
+  <run_depend>pal_statistics</run_depend>
+  <run_depend>pal_urdf_utils</run_depend>
+  <run_depend>pal_wsg_gripper</run_depend>
+  <run_depend>play_motion</run_depend>
+  <run_depend>pmb2_navigation</run_depend>
+  <run_depend>pmb2_robot</run_depend>
+  <run_depend>pmb2_simulation</run_depend>
+  <run_depend>robot_pose</run_depend>
+  <run_depend>roboticsgroup_gazebo_plugins</run_depend>
+  <run_depend>ros_control</run_depend>
+  <run_depend>ros_controllers</run_depend>
+  <run_depend>rviz_plugin_covariance</run_depend>
+  <run_depend>simple_grasping_action</run_depend>
+  <run_depend>simple_models_robot</run_depend>
+  <run_depend>slam_gmapping</run_depend>
+  <run_depend>teleop_tools</run_depend>
+  <run_depend>tf_lookup</run_depend>
+  <run_depend>tiago_description_calibration</run_depend>
+  <run_depend>tiago_ikfast_arm_plugin</run_depend>
+  <run_depend>tiago_moveit_config</run_depend>
+  <run_depend>tiago_navigation</run_depend>
+  <run_depend>tiago_robot</run_depend>
+  <run_depend>tiago_simulation</run_depend>
+  <run_depend>tiago_tutorials</run_depend>
+
+
+  <export>
+    <metapackage/>
+  </export>
+</package>
