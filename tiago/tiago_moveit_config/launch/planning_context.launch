@@ -16,6 +16,7 @@
   <arg name="laser_model"  default="sick-571"/>
   <arg name="camera_model"  default="orbbec-astra"/>
   <arg name="base_type"  default="pmb2"/>
+  <arg name="fixed_torso" default="false" />
   <arg name="multi" default=""/>
   <arg name="file_suffix" value="$(eval (('' if base_type == 'pmb2' else 'omni_') + ('no-arm' if not arm else (end_effector if end_effector else 'no-ee') + 
 		('_' +  ft_sensor if ft_sensor else ''))))"/>  
@@ -27,6 +28,7 @@
       <arg name="laser_model" value="$(arg laser_model)"/>
       <arg name="camera_model" value="$(arg camera_model)"/>
       <arg name="base_type" value="$(arg base_type)"/>
+      <arg name="fixed_torso" value="$(arg fixed_torso)" />
       <arg name="multi"  value="$(arg multi)"/>
   </include>
 

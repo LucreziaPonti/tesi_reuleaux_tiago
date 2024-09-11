@@ -330,37 +330,57 @@ double PlaceBase::calculateScoreForArmBase(std::vector<geometry_msgs::Pose> &gra
 void PlaceBase::transformFromRobotbaseToArmBase(const geometry_msgs::Pose& base_pose, geometry_msgs::Pose &arm_base_pose)
 {
   //moveit::planning_interface::MoveGroup group(selected_group_);//Creating move group
+  ////Get a joint group from this model (by name) - get the joints of the "arm" group
   const moveit::core::JointModelGroup* arm_jmp = robot_model_->getJointModelGroup(selected_group_);
+  ////Get the names of the links that are part of this joint group. (arm)
   const std::vector<std::string>& arm_link_names = arm_jmp->getLinkModelNames();
+  ////i think this gets the configuration the model is in, to then use to compute the transforms
   moveit::core::RobotStatePtr robot_state_(new moveit::core::RobotState(robot_model_));
+  ////Get the link names (of all links)
   std::vector<std::string> full_link_names = robot_model_->getLinkModelNames();
+  ////find the index of the first link of the arm inside the entire list of link names
   int position = std::find(full_link_names.begin(), full_link_names.end(), arm_link_names[0]) -full_link_names.begin() ;
+  ////get the "Global transform" to the link = transform from base_footprint (when it is the fixed frame i think)
   const Eigen::Affine3d trans_to_arm_parent = robot_state_->getGlobalLinkTransform(full_link_names[position-1]);
-  Eigen::Affine3d base_pose_tf;
+  Eigen::Affine3d base_pose_tf; //Affine3d is a Pose type message(contains a Vector 3d and Quaterniond/RotationMatrix). 
+  ////change the pose info of the base pose computed into a tf
   tf::poseMsgToEigen(base_pose, base_pose_tf);
+  ////finds the "new"position of the first link of the arm if the global frame=base frame corresponds to the base pose
   tf::poseEigenToMsg( base_pose_tf * trans_to_arm_parent  , arm_base_pose);
+  //return the pose of the first link of the arm (for the first three solving methods)
 }
 
 //function transforms the inverse reachability data to the base of the whole robot model
 void PlaceBase::transformToRobotbase(std::multimap< std::vector< double >, std::vector< double > > armBasePoses,
                           std::multimap< std::vector< double >, std::vector< double > >& robotBasePoses)
 {
+  ////get the joints of the "arm" group
   const moveit::core::JointModelGroup* robot_jmp = robot_model_->getJointModelGroup(selected_group_);
+  ////get the names of the links of the arm
   const std::vector<std::string>& arm_link_names = robot_jmp->getLinkModelNames();
+  ////robot state/configuration(?)
   moveit::core::RobotStatePtr robot_state_(new moveit::core::RobotState(robot_model_));
-  const Eigen::Affine3d trans_to_root = robot_state_->getGlobalLinkTransform(robot_model_->getRootLinkName());
+  ////transform from global frame to "root link" of the entire robot
+  const Eigen::Affine3d trans_to_root = robot_state_->getGlobalLinkTransform(robot_model_->getRootLinkName()); ////not used ever
+  ////tranform from global frame to first link of arm
   const Eigen::Affine3d trans_to_arm = robot_state_->getGlobalLinkTransform(arm_link_names[0]);
-  const Eigen::Affine3d arm_to_root = trans_to_arm.inverse();
+  ////inverse - ??? we assume that root and global frames correspond???????????????????????????????
+  const Eigen::Affine3d arm_to_root = trans_to_arm.inverse(); ////maybe here we should use trans_to_root
 
   sphere_discretization::SphereDiscretization sd;
+  ////for all the possible armbaseposes computed  (globally??)
   for (std::multimap< std::vector< double >, std::vector< double > >::iterator it = armBasePoses.begin(); it != armBasePoses.end();++it)
   {
     geometry_msgs::Pose arm_base_pose;
+    ////save the pose of this iteration into arm_base_pose
     sd.convertVectorToPose(it->second, arm_base_pose);
     Eigen::Affine3d arm_base_tf;
+    ////convert into an Affine3d tf
     tf::poseMsgToEigen(arm_base_pose, arm_base_tf);
     geometry_msgs::Pose robot_base_pose;
-    tf::poseEigenToMsg(arm_to_root*arm_base_tf , robot_base_pose);
+    ////compute position of the robot base given the position of the first link of the arm
+    tf::poseEigenToMsg(arm_to_root*arm_base_tf , robot_base_pose);//// le avrei messe al contrario = arm_base_tf*arm_to_root
+    ////convert to have the correct data format of the global tranform to computed robot base
     static const int arr[] = {1,1,1};
     std::vector<double> base_vec (arr, arr + sizeof(arr) / sizeof(arr[0]) );
     std::vector<double> base_pose;
@@ -385,7 +405,7 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
   if (grasp_poses.size() == 0)
     ROS_ERROR_STREAM("Please provide atleast one grasp pose.");
 
-  else if(selected_method_ == 4) //metodo user intuition - non gli serve controllare l'inverse reachability prima di fare baseplace... (I guess)
+  else if(selected_method_ == 4) ////metodo user intuition - non gli serve controllare l'inverse reachability prima di fare baseplace... (I guess)
   {
     GRASP_POSES_ = grasp_poses;
     BasePlaceMethodHandler();
@@ -427,9 +447,9 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
       final_base_poses.clear();
       GRASP_POSES_ = grasp_poses;
 
-      if(selected_method_ == 3) // findBaseByVerticalRobotModel - devo estendere alla base del robot (dalla base del braccio)
+      if(selected_method_ == 3) //// findBaseByVerticalRobotModel - devo estendere alla base del robot (dalla base del braccio)
       {
-        ROS_INFO("debug---------------------------------------------------------------FIND BASE - VERTICAL ROBOT MODEL - NO USER INT");
+      ROS_INFO("////debug-----------------------------------------FIND BASE - VERTICAL ROBOT MODEL - NO USER INT");
         transformToRobotbase(PoseColFilter, robot_PoseColfilter);
         sd.associatePose(baseTrnsCol, grasp_poses, robot_PoseColfilter, res); //create a point cloud which consists of all of the possible base locations for all grasp poses and a list of base pose orientations
         ROS_INFO("Size of baseTrnsCol dataset: %lu", baseTrnsCol.size());
@@ -438,7 +458,7 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
 
       else
       {
-        ROS_INFO("debug---------------------------------------------------------------FIND BASE - ALTRI METODI DI CALCOLO");
+        ROS_INFO("////debug---------------------------------------FIND BASE - ALTRI METODI DI CALCOLO");
         sd.associatePose(baseTrnsCol, grasp_poses, PoseColFilter, res);
         ROS_INFO("Size of baseTrnsCol dataset: %lu", baseTrnsCol.size());
         createSpheres(baseTrnsCol, sphereColor, highScoreSp, false);
@@ -467,7 +487,7 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
       }
 
       // showBaseLocations(final_base_poses); //outdated function
-      OuputputVizHandler(final_base_poses);  // function to have different showBaseLocations methods
+      OuputputVizHandler(final_base_poses);  //// function to have different showBaseLocations methods
     }
   }
 
@@ -489,7 +509,7 @@ void PlaceBase::BasePlaceMethodHandler()
 {
   /* Switch cases for selecting method for base placement
   */
-  ROS_INFO("debug---------------------------------------------------------------BASE PLACEM METHOD HANDLER");
+  ROS_INFO("////debug----------------------------------------------BASE PLACEM METHOD HANDLER");
   switch (selected_method_)
   {
     case 0:
@@ -527,7 +547,7 @@ void PlaceBase::OuputputVizHandler(std::vector< geometry_msgs::Pose > po)
 {
   /* Switch cases for selecting output type for visualization
   */
-  ROS_INFO("debug---------------------------------------------------------------OUTPUT VIZ HANDLER");
+  ROS_INFO("////debug----------------------------------------------OUTPUT VIZ HANDLER");
   switch (selected_op_type_)
   {
     case 0:
@@ -758,10 +778,10 @@ void PlaceBase::showBaseLocationsbyArrow(std::vector< geometry_msgs::Pose > po)
   */
   ROS_INFO("Showing Base Locations by Arrow: Arrows are pointing in Z direction");
   std::vector<geometry_msgs::Pose> pose_arr;
-  ROS_INFO("debug---------------------------------------------------------------CREA POSE ARRAY %d",po.size());
+  ROS_INFO("////debug----------------------------------------------CREA POSE ARRAY %d",po.size());
   for(int i=0;i<po.size();i++)
   {
-    ROS_INFO("debug---------------------------------------------------------------INIZIO POSE ARRAY %d",i);
+    ROS_INFO("////debug----------------------------------------------INIZIO POSE ARRAY %d",i);
     tf2::Transform trns;
     tf2::Quaternion quat(po[i].orientation.x, po[i].orientation.y, po[i].orientation.z, po[i].orientation.w);
     tf2::Vector3 vec(po[i].position.x, po[i].position.y, po[i].position.z);
@@ -792,16 +812,16 @@ void PlaceBase::showBaseLocationsbyArrow(std::vector< geometry_msgs::Pose > po)
     new_pose.orientation.z = new_pose_quat[2];
     new_pose.orientation.w = new_pose_quat[3];
     pose_arr.push_back(new_pose);
-  ROS_INFO("debug---------------------------------------------------------------FINE POSE ARRAY %f %f %f %f %f %f %f ",new_pose_vec[0],new_pose_vec[1],new_pose_vec[2],new_pose_quat[0],new_pose_quat[1],new_pose_quat[2],new_pose_quat[3]);
+  ROS_INFO("////debug----------------------------------------------FINE POSE ARRAY %f %f %f %f %f %f %f ",new_pose_vec[0],new_pose_vec[1],new_pose_vec[2],new_pose_quat[0],new_pose_quat[1],new_pose_quat[2],new_pose_quat[3]);
   }
 
   ros::NodeHandle nh;
   ros::Publisher marker_pub = nh.advertise< visualization_msgs::MarkerArray >("visualization_marker_array", 1);
-  ROS_INFO("debug---------------------------------------------------------------crea viz marker array pub");
+  ROS_INFO("////debug----------------------------------------------crea viz marker array pub");
   visualization_msgs::MarkerArray markerArr;
   for (int i = 0; i < po.size(); ++i)
   {
-    ROS_INFO("debug---------------------------------------------------------------MARKER ARRAY %d",i);
+    ROS_INFO("////debug----------------------------------------------MARKER ARRAY %d",i);
     visualization_msgs::Marker marker;
     marker.header.frame_id = "base_footprint";
     marker.header.stamp = ros::Time::now();
@@ -823,7 +843,7 @@ void PlaceBase::showBaseLocationsbyArrow(std::vector< geometry_msgs::Pose > po)
     markerArr.markers.push_back(marker);
   }
   marker_pub.publish(markerArr);
-  ROS_INFO("debug---------------------------------------------------------------PUBBLICA MARKER ARRAY");
+  ROS_INFO("////debug----------------------------------------------PUBBLICA MARKER ARRAY");
 
 }
 

@@ -2,7 +2,6 @@
 <launch>
 
 <arg name = "moveit_pkg" default="tiago_moveit_config"/>
-<arg name="kinematics" value="$(optenv IK_SOLVER kdl)" />
 
 <!--Launch moveit required pkgs for your -->
 <include file="$(find base_placement_plugin)/launch/moveit_pkgs.launch">
@@ -10,27 +9,15 @@
 </include>
 
 <!--Running RVIZ for base_placement-->
-<node pkg="rviz" type="rviz" output="screen" name="rviz" args="-d $(find base_placement_plugin)/rviz/base_placement.rviz" >
-  <rosparam command="load" file="$(find tiago_moveit_config)/config/kinematics_$(arg kinematics).yaml"/>
-  <!-- irl il load lo fa anche in planning_context.launch - magari meglio evitare di rifarlo?? -->
-</node>
+<node pkg="rviz" type="rviz" output="screen" name="rviz" args="-d $(find base_placement_plugin)/rviz/base_placement.rviz" />
 
 
-<!--queste cose le potremmo mettere nell'helper.bash (?)-->
+  <!-- We do not have a robot connected, so publish fake joint states -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
 
-<!-- DA demo.launch  del tiago_moveit_config
- We do not have a robot connected, so publish fake joint states -->
-<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-  <param name="/use_gui" value="false"/>
-  <rosparam param="/source_list">[/move_group/fake_controller_joint_states]</rosparam>
-</node>
+  <!-- Given the published joint states, publish tf for the robot links -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
 
-<!--da simulation_tiago_bringup.launch-->
-<!-- Robot state publisher -->
-<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" respawn="true" output="screen">
-  <param name="publish_frequency" type="double" value="50.0"/>
-  <param name="tf_prefix" type="string" value=""/>
-</node>
 
 <!-- TF lookup ->
 <node pkg="tf_lookup" type="tf_lookup" name="tf_lookup" output="screen" respawn="true"/-->

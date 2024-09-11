@@ -9,6 +9,7 @@
   <arg name="no_safety_eps" default="False"/>
   <arg name="robot_description" default="robot_description"/>
   <arg name="base_type"  default="pmb2"/>
+  <arg name="fixed_torso" default="false" />
   <arg name="description_calibration_dir" value="$(optenv pal_eye_hand_calibration_tiago_calibration_path)"/>
   <arg name="extrinsic_calibration_dir" value="$(optenv pal_camera_calibration_extrinsics_calibration_path)"/>
   <!-- Robot description -->
@@ -23,6 +24,7 @@
     camera_model:=$(arg camera_model)
     no_safety_eps:=$(arg no_safety_eps)
     base_type:=$(arg base_type)
+    fixed_torso:=$(arg fixed_torso)
     description_calibration_dir:=$(arg description_calibration_dir)
     extrinsic_calibration_dir:=$(arg extrinsic_calibration_dir)
     $(arg multi)" />
