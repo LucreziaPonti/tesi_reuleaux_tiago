@@ -27,7 +27,7 @@
       <rosparam param="/source_list">[/move_group/fake_controller_joint_states]</rosparam>
     </node-->
     <!-- Given the published joint states, publish tf for the robot links -->
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+    <node unless="$(arg tiago_gazebo)" name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
 
     <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
     <include unless="$(arg tiago_gazebo)" file="$(find tiago_moveit_config)/launch/move_group.launch">
