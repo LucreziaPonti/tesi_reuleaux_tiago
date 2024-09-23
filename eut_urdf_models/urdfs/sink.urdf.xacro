@@ -1,0 +1,292 @@
+<robot name="sink_furniture" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <link name="world"/>
+
+    <joint name="base_joint" type="fixed">
+        <origin xyz="0.0 0.0 0.01" rpy="0.0 0.0 0.0"/>
+        <parent link="world"/>
+        <child link="base_link"/>
+    </joint>
+
+    <link name="base_link">
+        <inertial>
+            <origin xyz="-0.00035160 0.00212019 -0.00018166"/>
+            <mass value="50.00000000"/>
+            <inertia ixx="0.00073899" ixy="0.00002364" ixz="-0.00000317" iyy="0.00255100" iyz="0.00001670" izz="0.00296794"/>
+        </inertial>
+        <visual name="">
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_kitchen.obj" scale="100.0 100.0 100.0"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_kitchen.obj" scale="100.0 100.0 100.0"/>
+            </geometry>
+        </collision>
+    </link>  
+
+    <joint name="drawer_1_joint" type="prismatic">
+        <origin xyz="0.305 -0.068 0.895" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="drawer_1_link"/>
+        <axis xyz="0.0 -1.0 0.0"/>
+        <limit lower="0.0" upper="0.4" effort="100.0" velocity="100.0"/>
+        <dynamics damping="0.5" friction="1.0"/>
+    </joint>
+
+    <link name="drawer_1_link">
+        <inertial>
+            <origin xyz="0.00544868 0.05828378 0.25597375"/>
+            <mass value="5.00000000"/>
+            <inertia ixx="0.13395864" ixy="0.00000600" ixz="0.00125108" iyy="0.25914698" iyz="-0.00124005" izz="0.14907337"/>
+        </inertial>
+        <visual name="">
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_1.obj"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_1.obj"/>
+            </geometry>
+        </collision>
+    </link>    
+
+    <joint name="drawer_2_joint" type="prismatic">
+        <origin xyz="0.305 -0.068 0.694" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="drawer_2_link"/>
+        <axis xyz="0.0 -1.0 0.0"/>
+        <limit lower="0.0" upper="0.4" effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <link name="drawer_2_link">
+        <inertial>
+            <origin xyz="0.00544866 0.06012162 0.25597374"/>
+            <mass value="5.00000000"/>
+            <inertia ixx="0.13396545" ixy="0.00000599" ixz="0.00125106" iyy="0.25914808" iyz="-0.00126118" izz="0.14907746"/>
+        </inertial>
+        <visual name="">
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_2.obj"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_2.obj"/>
+            </geometry>
+        </collision>
+    </link>    
+   
+
+    <joint name="drawer_3_joint" type="prismatic">
+        <origin xyz="0.311 -0.068 0.392" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="drawer_3_link"/>
+        <axis xyz="0.0 -1.0 0.0"/>
+        <limit lower="0.0" upper="0.4" effort="0.0" velocity="0.0"/>
+        <dynamics damping="0.5" friction="1.0"/>
+    </joint>
+
+    <link name="drawer_3_link">
+        <inertial>
+            <origin xyz="0.00544866 0.14675670 0.25597380"/>
+            <mass value="7.00000000"/>
+            <inertia ixx="0.22977796" ixy="0.00021958" ixz="0.00169859" iyy="0.35876858" iyz="-0.02388412" izz="0.25600556"/>
+        </inertial>
+        <visual name="">
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_grande.obj"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_grande.obj"/>
+            </geometry>
+        </collision>
+    </link>
+ 
+  
+    <joint name="door_1_joint" type="revolute">
+        <origin xyz="-0.596 -0.325 0.594" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="door_1_link"/>
+        <axis xyz="0.0 0.0 -1.0"/>
+        <limit lower="0.0" upper="2" effort="0.0" velocity="0.0"/>
+        <dynamics damping="0.5" friction="1.0"/>
+    </joint>
+
+    <link name="door_1_link">
+        <inertial>
+            <origin xyz="0.23430857 0.29677150 0.01334367"/>
+            <mass value="3.00000000"/>
+            <inertia ixx="0.14676221" ixy="-0.00813386" ixz="-0.00130403" iyy="0.07937598" iyz="-0.00166311" izz="0.22548436"/>
+        </inertial>
+        <visual name="">
+            <origin xyz="0.3 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_armario_lavamanos.obj"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.3 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_armario_lavamanos.obj"/>
+            </geometry>
+        </collision>
+    </link>  
+
+    <joint name="door_2_joint" type="revolute">
+        <origin xyz="-0.899 -0.293 0.34" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="door_2_link"/>
+        <axis xyz="1.0 0.0 0.0"/>
+        <limit lower="0.0" upper="1.6" effort="0.0" velocity="0.0"/>
+        <dynamics damping="0.5" friction="1.0"/>
+    </joint>
+
+    <link name="door_2_link">
+        <inertial>
+            <origin xyz="0.00000004 0.35408571 0.04442934"/>
+            <mass value="8.00000000"/>
+            <inertia ixx="0.43065651" ixy="0.00000000" ixz="-0.00000000" iyy="0.23176897" iyz="-0.00532904" izz="0.65027663"/>
+        </inertial>
+        <visual name="">
+            <origin xyz="0.0 0.0 0.254" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_puerta_lavavajillas.obj"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.254" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_puerta_lavavajillas.obj"/>
+            </geometry>
+        </collision>
+    </link> 
+
+    <joint name="washer_joint" type="fixed">
+        <origin xyz="-0.09 0.001 0.581" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="washer_link"/>
+        <axis xyz="0.0 0.0 0.0"/>
+        <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <link name="washer_link">
+        <inertial>
+            <origin xyz="1.00215784 0.00855085 0.17573106"/>
+            <mass value="30.00000000"/>
+            <inertia ixx="2.39893526" ixy="0.00000001" ixz="-0.00000013" iyy="1.72285672" iyz="0.01795480" izz="2.33707745"/>
+        </inertial>
+        <visual name="">
+            <origin xyz="-0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_lavadora.obj"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_lavadora.obj"/>
+            </geometry>
+        </collision>
+    </link>  
+
+    <joint name="dishrack_1_joint" type="prismatic">
+        <origin xyz="-0.897 0.035 0.49" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="dishrack_1_link"/>
+        <axis xyz="0.0 -1.0 0.0"/>
+        <limit lower="0.0" upper="0.5" effort="0.0" velocity="0.0"/>
+        <dynamics damping="0.5" friction="1.0"/>
+    </joint>
+
+    <link name="dishrack_1_link">
+        <inertial>
+            <origin xyz="-0.00000004 -0.03399196 0.00807930"/>
+            <mass value="3.00000000"/>
+            <inertia ixx="0.07006633" ixy="0.00000000" ixz="-0.00000000" iyy="0.13019589" iyz="0.00016244" izz="0.07835357"/>
+        </inertial>
+        <visual name="">
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj"/>
+            </geometry>
+        </collision>
+    </link>   
+
+    <joint name="dishrack_2_joint" type="prismatic">
+        <origin xyz="-0.897 0.035 0.792" rpy="0.0 0.0 0.0"/>
+        <parent link="base_link"/>
+        <child link="dishrack_2_link"/>
+        <axis xyz="0.0 -1.0 0.0"/>
+        <limit lower="0.0" upper="0.5" effort="0.0" velocity="0.0"/>
+        <dynamics damping="0.5" friction="1.0"/>
+    </joint>
+
+    <link name="dishrack_2_link">
+        <inertial>
+            <origin xyz="0.00870560 -0.00441701 0.02634197"/>
+            <mass value="3.00000000"/>
+            <inertia ixx="0.06951009" ixy="0.00002372" ixz="0.00004623" iyy="0.12874437" iyz="0.00035407" izz="0.07070986"/>
+        </inertial>
+        <visual name="">
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj"/>
+            </geometry>
+        </collision>
+    </link> 
+
+    <joint name="silverware_joint" type="fixed">
+        <origin xyz="-0.0 -0.01 0.05" rpy="0.0 0.0 0.0"/>
+        <parent link="dishrack_1_link"/>
+        <child link="silverware_link"/>
+        <axis xyz="0.0 0.0 0.0"/>
+        <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
+        <dynamics damping="0.5" friction="1.0"/>
+    </joint>
+
+    <link name="silverware_link">
+        <inertial>
+            <origin xyz="-0.00000000 0.06352928 -0.00000001"/>
+            <mass value="2.00000000"/>
+            <inertia ixx="0.00831395" ixy="0.00000000" ixz="-0.00000000" iyy="0.00906913" iyz="-0.00000000" izz="0.01097472"/>
+        </inertial>
+        <visual name="">
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
+            <geometry>
+                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj"/>
+            </geometry>
+        </collision>
+    </link>
+
+</robot>

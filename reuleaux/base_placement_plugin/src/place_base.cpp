@@ -340,7 +340,7 @@ void PlaceBase::transformFromRobotbaseToArmBase(const geometry_msgs::Pose& base_
   std::vector<std::string> full_link_names = robot_model_->getLinkModelNames();
   ////find the index of the first link of the arm inside the entire list of link names
   int position = std::find(full_link_names.begin(), full_link_names.end(), arm_link_names[0]) -full_link_names.begin() ;
-  ////get the "Global transform" to the link = transform from base_footprint (when it is the fixed frame i think)
+  ////get the "Global transform" to the link = transform from the fixed frame
   const Eigen::Affine3d trans_to_arm_parent = robot_state_->getGlobalLinkTransform(full_link_names[position-1]);
   Eigen::Affine3d base_pose_tf; //Affine3d is a Pose type message(contains a Vector 3d and Quaterniond/RotationMatrix). 
   ////change the pose info of the base pose computed into a tf

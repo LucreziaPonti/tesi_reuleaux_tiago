@@ -9,6 +9,7 @@
   <arg name="camera_model"  default="orbbec-astra"/>
   <arg name="base_type"  default="pmb2"/>
   <arg name="fixed_torso" default="true" />
+  <arg name="world" default="custom_kitchen" />
   
   
   <arg name="tiago_gazebo" default="false" />
@@ -18,14 +19,14 @@
   <arg name="end_effector" value="$(arg end_effector)"/>
   <arg name="public_sim" value="true"/>
   <arg name="tuck_arm" value="false"/>
+  <arg name="world" value="$(arg world)"/>
   <!--AL MOMENTO NON HO CORRETTO TUTTA QUESTA SEQUENZA DI LAUNCH PER BLOCCARE IL TORSO-->
   </include>
     
     <!-- We do not have a robot connected, so publish fake joint states -->
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
-      <!--param name="/use_gui" value="false"/>
-      <rosparam param="/source_list">[/move_group/fake_controller_joint_states]</rosparam>
-    </node-->
+    <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+      <!--rosparam param="/source_list">[/move_group/fake_controller_joint_states]</rosparam-->
+    </node>
     <!-- Given the published joint states, publish tf for the robot links -->
     <node unless="$(arg tiago_gazebo)" name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
 

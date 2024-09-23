@@ -33,7 +33,19 @@ target_link_libraries(plan_arm_torso_ik
    ${catkin_LIBRARIES}
  )
 
-install(TARGETS plan_arm_torso_fk plan_arm_torso_ik
+add_executable(plan_arm_fk src/plan_arm_fk.cpp)
+add_dependencies(plan_arm_fk ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(plan_arm_fk
+  ${catkin_LIBRARIES}
+)
+
+add_executable(plan_arm_ik src/plan_arm_ik.cpp)
+add_dependencies(plan_arm_ik ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(plan_arm_ik
+  ${catkin_LIBRARIES}
+)
+
+install(TARGETS plan_arm_torso_fk plan_arm_torso_ik plan_arm_fk plan_arm_ik
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
