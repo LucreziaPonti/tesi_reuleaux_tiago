@@ -7,15 +7,13 @@
 
 
     
-    <arg name="gzpose" default="-x -0.25 -y -1.5 -z 0.0 -R 0.0 -P 0.0 -Y 0.0"/>
+    <!--arg name="gzpose" default="-x -0.25 -y -1.5 -z 0.0 -R 0.0 -P 0.0 -Y 0.0"/-->
+    <arg name="gzpose" default="-x 0 -y 0 -z 0.0 -R 0.0 -P 0.0 -Y 0.0"/>
     <arg name="public_sim" default="true"/>
     
 
     <arg name="tiago_ee" default="pal-gripper" doc ="Choose between: pal-gripper,pal-hey5, robotiq-2f-85 "/>
     
-
-
-
 
     <!-- start up world -->
     <include file="$(find eut_urdf_models)/launch/kitchen_gazebo.launch">

@@ -39,7 +39,7 @@
 
   <group ns="$(arg namespace)">
 
-    <include file="$(find eut_urdf_models)/launch/tiago_gazebo.launch">
+    <include file="$(find tiago_gazebo)/launch/tiago_gazebo.launch">
       <arg name="world"      value="$(arg world)"/>
       <arg name="arm" value="$(arg arm)"/>
       <arg name="end_effector" value="$(arg end_effector)"/>

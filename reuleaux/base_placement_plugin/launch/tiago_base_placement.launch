@@ -24,7 +24,7 @@
   </include>
     
     <!-- We do not have a robot connected, so publish fake joint states -->
-    <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+    <node unless="$(arg tiago_gazebo)" name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
       <!--rosparam param="/source_list">[/move_group/fake_controller_joint_states]</rosparam-->
     </node>
     <!-- Given the published joint states, publish tf for the robot links -->
