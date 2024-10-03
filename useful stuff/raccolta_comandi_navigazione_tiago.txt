@@ -1,0 +1,40 @@
+CREATE A MAP
+roslaunch tiago_2dnav_gazebo tiago_mapping.launch public_sim:=true
+
+rosrun key_teleop key_teleop.py
+
+rosservice call /pal_map_manager/save_map "directory: ''" 
+(default save folder: ~/.pal/tiago_maps/configurations/*world_name* )
+
+NAVIGATION WITH A MAP FROM pal
+roslaunch tiago_2dnav_gazebo tiago_navigation.launch public_sim:=true world:=simple_office
+*with the default map omit world; other param: "lost"
+roslaunch tiago_2dnav_gazebo tiago_navigation.launch public_sim:=true lost:=true map:=*path to map folder*
+**some maps are in: ./src/tesi_reuleaux_tiago/tiago/tiago_navigation/tiago_maps/configurations/... *
+
+NAVIGATION WITH THE EURECAT MAP
+*exactly same as pal but with pakage eut_urdf_models, the world:=eut_kitchen is already default*
+roslaunch eut_urdf_models tiago_navigation.launch public_sim:=true 
+
+roslaunch eut_urdf_models tiago_navigation.launch public_sim:=true lost:=true map:=./src/tesi_reuleaux_tiago/eut_urdf_models/maps/eut_kitchen
+
+
+!! CORRECT LOCALIZATION
+rosservice call /global_localization "{}"
+
+rosrun key_teleop key_teleop.py
+*move around a bit so it understand where it is*
+
+rosservice call /move_base/clear_costmaps "{}"
+*clean up the map from the wrong stuff due to wrong loc*
+
+AUTONOMUS NAV WITH RVIZ
+*kill the key teleop node*
+
+*2dnav button in the upper part of rviz*
+*By clicking and holding the left button of the mouse over the point of the map at which we want to send the robot a green arrow will appear.
+By dragging the mouse around the point the orientation will change. 
+This arrow represents the target position and orientation that the robot needs to reach.*
+
+*When releasing the mouse button the global planner will compute a path, which will appear as a blue line starting at the 
+current position of the robot and ending with a red arrow representing the desired target orientation.*

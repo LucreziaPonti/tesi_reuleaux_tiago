@@ -1,0 +1,9 @@
+geometry_msgs/PoseStamped object_pose
+string object_name
+string surface
+---
+#result definition
+# Comes from moveit_msgs/MoveItErrorCodes
+int32 error_code
+---
+#feedback
