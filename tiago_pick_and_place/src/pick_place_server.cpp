@@ -150,11 +150,9 @@ public:
         clear_octomap_srv_.call(srv);*/
         std::vector<moveit_msgs::Grasp> grasps;
         grasps.resize(1);
-
         // Setting grasp pose
         grasps[0].grasp_pose.header.frame_id = object_pose.header.frame_id;
         grasps[0].grasp_pose.pose = object_pose.pose;
-        
         // Setting pre-grasp approach
         /* Defined with respect to frame_id */
         grasps[0].pre_grasp_approach.direction.header.frame_id = "arm_tool_link";
@@ -162,7 +160,6 @@ public:
         grasps[0].pre_grasp_approach.direction.vector.y = 1.0;
         grasps[0].pre_grasp_approach.min_distance = 0.12;
         grasps[0].pre_grasp_approach.desired_distance = 0.2;
-
         // Setting post-grasp retreat
         /* Defined with respect to frame_id */
         grasps[0].post_grasp_retreat.direction.header.frame_id = "arm_tool_link";
@@ -170,10 +167,8 @@ public:
         grasps[0].post_grasp_retreat.direction.vector.y = 1.0;
         grasps[0].post_grasp_retreat.min_distance = 0.12;
         grasps[0].post_grasp_retreat.desired_distance = 0.25;
-
         // Setting posture of eef before grasp
         openGripper(grasps[0].pre_grasp_posture);
-
         // Setting posture of eef during grasp
         closedGripper(grasps[0].grasp_posture);
 

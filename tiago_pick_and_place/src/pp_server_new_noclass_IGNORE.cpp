@@ -5,16 +5,18 @@
 
 // MoveIt
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
+#include <moveit/move_group_interface/move_group_interface.h>
+#include <moveit_msgs/Grasp.h>
+#include <moveit_msgs/PickupGoal.h>
+#include <moveit_msgs/PlaceGoal.h>
 
-// TF2
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <moveit_error_code.h>
 
-#include <actionlib/client/simple_action_client.h>
-#include <tiago_pick_and_place/PickUpPoseAction.h>
-
+//services
 #include <tiago_pick_and_place/PickUpName.h>
 #include <tiago_pick_and_place/MoveAll.h>
 
+//setup
 #include <gazebo_msgs/GetModelState.h>
 #include <geometry_msgs/Pose.h>
 #include <geometry_msgs/PoseStamped.h>
@@ -22,18 +24,23 @@
 #include <moveit_msgs/AttachedCollisionObject.h>
 #include <shape_msgs/SolidPrimitive.h>
 
+// setup of planning scene with collision objects:
 ros::ServiceClient gazebo_model_cl;
-std::vector<geometry_msgs::Pose> tiago_poses;
 std::vector<std::string> object_names;
 std::vector<shape_msgs::SolidPrimitive> object_shapes;
+//creation of tasks:
+std::vector<geometry_msgs::Pose> tiago_poses;
 std::vector<geometry_msgs::Pose> pick_poses;
 std::vector<geometry_msgs::Pose> place_poses;
-actionlib::SimpleActionClient<tiago_pick_and_place::PickUpPoseAction>* pick_ac;
-actionlib::SimpleActionClient<tiago_pick_and_place::PickUpPoseAction>* place_ac;
+//servers 
 ros::ServiceServer move_all_srv;
 ros::ServiceServer pick_name_srv;
 ros::ServiceServer place_name_srv;
 
+//usseful stuff
+int ret;
+
+///////////////////////////////////////////////////// CREATION OF TASKS :  ////////////////////////////////////////////////////////////////////////////
 void load_tiago_poses(ros::NodeHandle& nh){
   /*XmlRpc::XmlRpcValue object_list;
   ROS_INFO("DEBUG----inizio load obj info tiago"); 
@@ -191,7 +198,7 @@ ROS_INFO("DEBUG----get param fatto");
   
 }
 
-// Funzione per ottenere le pose dei modelli da Gazebo
+///////////////////////////////////////////////////// SETUP OF PLANNING SCENE :  ////////////////////////////////////////////////////////////////////////////
 geometry_msgs::Pose getModelPose(const std::string& model_name) {
     gazebo_msgs::GetModelState srv;
     srv.request.model_name = model_name;
@@ -222,19 +229,12 @@ ROS_INFO("DEBUG------ INIZIO CREAZIONE COLLISION OBJ");
     /* Define the primitive and its dimensions. */
     collision_objects[i].primitives.resize(1);
     collision_objects[i].primitives[0]= object_shapes[i];
-    /*collision_objects[i].primitives[0].type = collision_objects[i].primitives[0].BOX;
-    collision_objects[i].primitives[0].dimensions.resize(3);
-    //DA CAPIRE COME SISTEMARE -- DIMENSIONI PROVVISORIE PER TESTARE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
-    collision_objects[i].primitives[0].dimensions[0] = 0.1;
-    collision_objects[i].primitives[0].dimensions[1] = 0.1;
-    collision_objects[i].primitives[0].dimensions[2] = 0.2;*/
 
     /* Define the pose of the object. */
     collision_objects[i].primitive_poses.resize(1);
     collision_objects[i].primitive_poses[0]=getModelPose(object_names[i]);
     collision_objects[i].primitive_poses[0].position.z=0.815+collision_objects[i].primitives[0].dimensions[0]/2;
     
-    // END_SUB_TUTORIAL
 
     collision_objects[i].operation = collision_objects[i].ADD;
     ROS_INFO("DEBUG------AGGIUNTO");
@@ -322,17 +322,122 @@ ROS_INFO("DEBUG------ INIZIO CREAZIONE COLLISION OBJ");
   ROS_INFO("DEBUG------FATTO METTO NELLA INTERFACE");
 }
 
-////////////////////////////////////FUNCTIONS FOR HANDLING SERVICES pick_by_name, place_by_name, move_all //////////////////////////////////////////////////
+//////////////////////////////////////////////////// CREATE GOALS TO USE MOVE_GROUP PICK AND PLACE /////////////////////////////////////////////////////////
+void openGripper(trajectory_msgs::JointTrajectory& posture){
+    // BEGIN_SUB_TUTORIAL open_gripper
+    /* Add both finger joints of panda robot. */
+    posture.joint_names.resize(2);
+    posture.joint_names[0] = "gripper_left_finger_joint";
+    posture.joint_names[1] = "gripper_right_finger_joint";
 
-tiago_pick_and_place::PickUpPoseGoal crea_goal(std::string name, geometry_msgs::Pose pose, std::string frame, std::string surface){
-  tiago_pick_and_place::PickUpPoseGoal goal;
-  goal.object_name= name;
-  goal.object_pose.pose= pose;
-  goal.object_pose.header.frame_id= frame;
-  goal.surface=surface;
-  return goal;
+    /* Set them as open, wide enough for the object to fit. */
+    posture.points.resize(1);
+    posture.points[0].positions.resize(2);
+    posture.points[0].positions[0] = 0.04;
+    posture.points[0].positions[1] = 0.04;
+    posture.points[0].time_from_start = ros::Duration(2);
+    // END_SUB_TUTORIAL
 }
 
+void closedGripper(trajectory_msgs::JointTrajectory& posture){
+    /* Add both finger joints of . */
+    posture.joint_names.resize(2);
+    posture.joint_names[0] = "gripper_left_finger_joint";
+    posture.joint_names[1] = "gripper_right_finger_joint";
+
+    /* Set them as closed. */
+    posture.points.resize(1);
+    posture.points[0].positions.resize(2);
+    posture.points[0].positions[0] = 0.022;
+    posture.points[0].positions[1] = 0.022;
+    posture.points[0].time_from_start = ros::Duration(1);
+    
+}
+
+int sendPickGoal(std::string name, geometry_msgs::Pose pose, std::string frame, std::string surface){
+  moveit_msgs::PickupGoal goal;
+  goal.target_name= name;
+  goal.group_name= "arm";
+  //create grasp:
+    std::vector<moveit_msgs::Grasp> grasps;
+    grasps.resize(1);
+    // Setting grasp pose
+    grasps[0].grasp_pose.header.frame_id =frame;
+    grasps[0].grasp_pose.pose = pose;
+    // Setting pre-grasp approach
+    /* Defined with respect to frame_id */
+    grasps[0].pre_grasp_approach.direction.header.frame_id = "arm_tool_link";
+    /* Direction is set as positive x axis */
+    grasps[0].pre_grasp_approach.direction.vector.y = 1.0;
+    grasps[0].pre_grasp_approach.min_distance = 0.12;
+    grasps[0].pre_grasp_approach.desired_distance = 0.2;
+    // Setting post-grasp retreat
+    /* Defined with respect to frame_id */
+    grasps[0].post_grasp_retreat.direction.header.frame_id = "arm_tool_link";
+    /* Direction is set as positive z axis */
+    grasps[0].post_grasp_retreat.direction.vector.y = 1.0;
+    grasps[0].post_grasp_retreat.min_distance = 0.12;
+    grasps[0].post_grasp_retreat.desired_distance = 0.25;
+    // Setting posture of eef before grasp
+    openGripper(grasps[0].pre_grasp_posture);
+    // Setting posture of eef during grasp
+    closedGripper(grasps[0].grasp_posture);
+  goal.possible_grasps= grasps;
+  goal.support_surface_name=surface;
+  goal.allow_gripper_support_collision=false;
+  goal.attached_object_touch_links = {"gripper_left_finger_link", "gripper_right_finger_link", "gripper_link"};
+  goal.allowed_planning_time = 35.0;
+  goal.planning_options.planning_scene_diff.is_diff = true;
+  goal.planning_options.planning_scene_diff.robot_state.is_diff = true;
+  goal.planning_options.plan_only = false;
+  goal.planning_options.replan = true;
+  goal.planning_options.replan_attempts = 1;
+  goal.allowed_touch_objects = {};
+  
+  return move_group.pick(goal).val;
+}
+
+int sendPlaceGoal(std::string name, geometry_msgs::Pose pose, std::string frame, std::string surface){
+  moveit_msgs::PlaceGoal goal;
+  goal.attached_object_name= name;
+  goal.group_name= "arm";
+  //create place locations:
+    std::vector<moveit_msgs::PlaceLocation> place_location;
+    place_location.resize(1);
+    // Setting grasp pose
+    place_location[0].place_pose.header.frame_id = frame;
+    place_location[0].place_pose.pose = pose;
+    // Setting pre-place approach
+    place_location[0].pre_place_approach.direction.header.frame_id = "arm_tool_link";
+    /* Direction is set as positive x axis */
+    place_location[0].pre_place_approach.direction.vector.y = 1.0;
+    place_location[0].pre_place_approach.min_distance = 0.12;
+    place_location[0].pre_place_approach.desired_distance = 0.2;
+    // Setting post-place retreat
+    place_location[0].post_place_retreat.direction.header.frame_id = "arm_tool_link";
+    /* Direction is set as positive y axis */
+    place_location[0].post_place_retreat.direction.vector.y = -1.0;
+    place_location[0].post_place_retreat.min_distance = 0.12;
+    place_location[0].post_place_retreat.desired_distance = 0.25;
+    // Setting posture of eef after placing
+    openGripper(place_location[0].post_place_posture);
+  goal.place_locations= place_location;
+  goal.place_eef=true; //because we defined the place locations "as grasps"
+  goal.support_surface_name=surface;
+  goal.allow_gripper_support_collision=false;
+  goal.allowed_touch_objects = {"gripper_left_finger_link", "gripper_right_finger_link", "gripper_link"};
+  goal.allowed_planning_time = 15.0;
+  goal.planning_options.planning_scene_diff.is_diff = true;
+  goal.planning_options.planning_scene_diff.robot_state.is_diff = true;
+  goal.planning_options.plan_only = false;
+  goal.planning_options.replan = true;
+  goal.planning_options.replan_attempts = 1;
+  
+  return move_group.place(goal).val;
+}
+
+
+///////////////////////////////////////////////////// FUNCTIONS FOR SERVICES pick_object, place_object, move_all :  ////////////////////////////////////////////////////////////////////////////
 int pick_place_name(std::string name, bool tiago, bool pick){
   //trova l'indice dell'oggetto
   int i;
@@ -347,67 +452,56 @@ int pick_place_name(std::string name, bool tiago, bool pick){
   }
   if(pick){
     if(tiago){
-      pick_ac->sendGoal(crea_goal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back"));  
+      ret=sendPickGoal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back");  
     }else{
-      pick_ac->sendGoal(crea_goal(object_names[i],pick_poses[i],"odom","table_pick"));
+      ret=sendPickGoal(object_names[i],pick_poses[i],"odom","table_pick");
     }
-    pick_ac->waitForResult();
-    if(pick_ac->getState() == actionlib::SimpleClientGoalState::ABORTED){
-      return moveit_msgs::MoveItErrorCodes::FAILURE;
-    }
+    
   }else{
     if(tiago){
-      place_ac->sendGoal(crea_goal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back"));  
+      ret=sendPlaceGoal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back"); 
     }else{
-      place_ac->sendGoal(crea_goal(object_names[i],place_poses[i],"odom","table_place"));
-    }
-    place_ac->waitForResult();
-    if(place_ac->getState() == actionlib::SimpleClientGoalState::ABORTED){
-      return moveit_msgs::MoveItErrorCodes::FAILURE;
+      ret=sendPlaceGoal(object_names[i],place_poses[i],"odom","table_place");
     }
   }
-  return moveit_msgs::MoveItErrorCodes::SUCCESS;
+  return ret;
 }
 
 int move_objects(bool pick){
-  if (pick){ //prendo dal tavolo e posiziono su tiago per il trasporto
-    for (int i = 0; i < object_names.size(); i++){
-      pick_ac->sendGoal(crea_goal(object_names[i],pick_poses[i],"odom","table_pick"));
-      pick_ac->waitForResult();
-      if(pick_ac->getState() == actionlib::SimpleClientGoalState::ABORTED){
-        return moveit_msgs::MoveItErrorCodes::FAILURE;
-      }
-      place_ac->sendGoal(crea_goal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back"));
-      place_ac->waitForResult();
-      if(place_ac->getState() == actionlib::SimpleClientGoalState::ABORTED){
-        return moveit_msgs::MoveItErrorCodes::FAILURE;
-      }  
+    if (pick){ //prendo dal tavolo e posiziono su tiago per il trasporto
+        for (int i = 0; i < tiago_poses.size(); i++){
+            ret=sendPickGoal(object_names[i],pick_poses[i],"odom","table_pick");
+            if(ret!=1){ //if not SUCCESS
+                return ret;
+            }
+            ret=sendPlaceGoal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back");
+            if(ret!=1){ //if not SUCCESS
+                return ret;
+            } 
+        }
+    }else{ //prendo dal tiago e metto a posto
+        for (int i = 0; i < tiago_poses.size(); i++){
+            ret=sendPickGoal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back");
+            if(ret!=1){ //if not SUCCESS
+                return ret;
+            }
+            ret=sendPlaceGoal(object_names[i],place_poses[i],"odom","table_place");
+            if(ret!=1){ //if not SUCCESS
+                return ret;
+            }
+        }
     }
-  }else{ //prendo dal tiago e metto a posto
-    for (int i = 0; i < object_names.size(); i++){
-      pick_ac->sendGoal(crea_goal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back"));
-      pick_ac->waitForResult();
-      if(pick_ac->getState() == actionlib::SimpleClientGoalState::ABORTED){
-        return moveit_msgs::MoveItErrorCodes::FAILURE;
-      }
-      place_ac->sendGoal(crea_goal(object_names[i],place_poses[i],"odom","table_place"));
-      place_ac->waitForResult();
-      if(place_ac->getState() == actionlib::SimpleClientGoalState::ABORTED){
-        return moveit_msgs::MoveItErrorCodes::FAILURE;
-      } 
-    }
-  }
-  return moveit_msgs::MoveItErrorCodes::SUCCESS;
+    return moveit_msgs::MoveItErrorCodes::SUCCESS;
 }
 
-// Callback per il pick_by_name
+// Callback per il pick_object
 bool pick_name_cb(tiago_pick_and_place::PickUpName::Request &req, tiago_pick_and_place::PickUpName::Response &res) {
     int error_code = pick_place_name(req.object_name,req.tiago,true);
     res.error_code = error_code;
     return true;
 }
 
-// Callback per il pick_by_name
+// Callback per il pick_object
 bool place_name_cb(tiago_pick_and_place::PickUpName::Request &req, tiago_pick_and_place::PickUpName::Response &res) {
     int error_code = pick_place_name(req.object_name,req.tiago,false);
     res.error_code = error_code;
@@ -424,42 +518,31 @@ bool move_all_cb(tiago_pick_and_place::MoveAll::Request &req, tiago_pick_and_pla
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "pick_place_handler");
+  ros::init(argc, argv, "pick_place_server_new");
   ros::NodeHandle nh;
   ros::AsyncSpinner spinner(1);
   spinner.start();
-  //creiamo tutti i client che ci serviranno
-  gazebo_model_cl = nh.serviceClient<gazebo_msgs::GetModelState>("/gazebo/get_model_state"); //per mettere i collision objects
-  //per fare le azioni di pick and place
-  pick_ac = new actionlib::SimpleActionClient<tiago_pick_and_place::PickUpPoseAction>("pick_pose", true);
-  place_ac = new actionlib::SimpleActionClient<tiago_pick_and_place::PickUpPoseAction>("place_pose", true);
-
-  ROS_INFO("Waiting for action servers...");
-  pick_ac->waitForServer();
-  place_ac->waitForServer();
-  ROS_INFO("Action servers connected.");
-
+  
+  // create clients needed
+  gazebo_model_cl = nh.serviceClient<gazebo_msgs::GetModelState>("/gazebo/get_model_state"); //useful for collision objects
+  
   ros::WallDuration(1.0).sleep();
-  load_tiago_poses(nh);
-  //funzione che prende le info degli oggetti e del grasp
-  //std::string pick_task_path;
-    //nh.param("/pick_and_place_handler/pick_task_path", pick_task_path);
-    //std::string place_task_path;
-    //nh.param("/pick_and_place_handler/place_task_path", place_task_path);
-    load_obj_info(nh,"/pick_and_place_handler/pick_task",true); //salva i nomi e le pose nell'array pick_pose
-    //load_obj_info(nh,"place_task",false); //salva solo le pose nell'array place_pose
 
-  //creiamo la planning scene
+  //setup
+  load_tiago_poses(nh);
+  load_obj_info(nh,"/pick_and_place_handler/pick_task",true); //salva i nomi e le pose nell'array pick_pose
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
   addCollisionObjects(planning_scene_interface,object_names);
+  //movegroup
+  moveit::planning_interface::MoveGroupInterface move_group("arm");
 
   // Wait a bit for ROS things to initialize
   ros::WallDuration(1.0).sleep();
   
   //rendiamo disponibili i servizi per eseguire le diverse task
-  move_all_srv = nh.advertiseService("move_all",move_all_cb);
-  pick_name_srv = nh.advertiseService("pick_by_name",pick_name_cb);
-  place_name_srv = nh.advertiseService("place_by_name",place_name_cb);
+  move_all_srv = nh.advertiseService("move_obj_on_tiago",move_all_cb);
+  pick_name_srv = nh.advertiseService("pick_object",pick_name_cb);
+  place_name_srv = nh.advertiseService("place_object",place_name_cb);
   
   ros::waitForShutdown();
   return 0;

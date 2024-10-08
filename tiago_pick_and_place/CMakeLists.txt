@@ -54,6 +54,14 @@ target_link_libraries(pick_place_handler  ${catkin_LIBRARIES} )
 # Install targets
 install(TARGETS pick_place_handler  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
+# Add your executable
+add_executable(pick_place_server_new src/pick_place_server_new.cpp)
+# Link against the required libraries
+target_link_libraries(pick_place_server_new  ${catkin_LIBRARIES})
+# Install targets
+install(TARGETS pick_place_server_new  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+
 install(DIRECTORY launch config
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 
