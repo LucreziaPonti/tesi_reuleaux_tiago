@@ -280,8 +280,8 @@ PickPlaceManager() :move_group("arm_torso") {
 
         posture.points.resize(1);
         posture.points[0].positions.resize(2);
-        posture.points[0].positions[0] = 0.04;
-        posture.points[0].positions[1] = 0.04;
+        posture.points[0].positions[0] = 0.042;
+        posture.points[0].positions[1] = 0.042;
         posture.points[0].time_from_start = ros::Duration(2);
     }
 
@@ -294,8 +294,8 @@ PickPlaceManager() :move_group("arm_torso") {
 
         posture.points.resize(1);
         posture.points[0].positions.resize(2);
-        posture.points[0].positions[0] = 0.022;
-        posture.points[0].positions[1] = 0.022;
+        posture.points[0].positions[0] = 0.02;
+        posture.points[0].positions[1] = 0.02;
         posture.points[0].time_from_start = ros::Duration(1);
     }
 
@@ -317,9 +317,9 @@ PickPlaceManager() :move_group("arm_torso") {
         grasps[0].pre_grasp_approach.desired_distance = 0.2;
 
         grasps[0].post_grasp_retreat.direction.header.frame_id = "arm_tool_link";
-        grasps[0].post_grasp_retreat.direction.vector.y = 1.0;
+        grasps[0].post_grasp_retreat.direction.vector.z = 1.0;
         grasps[0].post_grasp_retreat.min_distance = 0.12;
-        grasps[0].post_grasp_retreat.desired_distance = 0.25;
+        grasps[0].post_grasp_retreat.desired_distance = 0.2;
 
         openGripper(grasps[0].pre_grasp_posture);
         closedGripper(grasps[0].grasp_posture);
@@ -355,7 +355,7 @@ PickPlaceManager() :move_group("arm_torso") {
         place_location[0].place_pose.pose = pose;
 
         place_location[0].pre_place_approach.direction.header.frame_id = "arm_tool_link";
-        place_location[0].pre_place_approach.direction.vector.y = 1.0;
+        place_location[0].pre_place_approach.direction.vector.z = 1.0;
         place_location[0].pre_place_approach.min_distance = 0.12;
         place_location[0].pre_place_approach.desired_distance = 0.2;
 

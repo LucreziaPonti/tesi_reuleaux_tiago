@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
+
+  <arg name="rviz"  default="true"/>
   <!-- Selector for tiago type -->
   <arg name="arm"  default="True"/>
   <arg name="end_effector"  default="pal-gripper"/>
@@ -42,7 +44,7 @@
   </include>
 
   <!-- Run Rviz and load the default config to see the state of the move_group node -->
-  <include file="$(find tiago_moveit_config)/launch/moveit_rviz.launch">
+  <include file="$(find tiago_moveit_config)/launch/moveit_rviz.launch" if="$(arg rviz)">
     <arg name="config" value="true"/>
     <arg name="debug" value="$(arg debug)"/>
   </include>
