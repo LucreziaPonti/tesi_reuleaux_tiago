@@ -7,7 +7,7 @@ time_pre_grasp_posture: 2.0
 time_grasp_posture: 1.0
 time_grasp_posture_final: 3.0
 # Base frame of MoveIt for your robot
-grasp_pose_frame_id: odom
+grasp_pose_frame_id: map
 # Frame where the direction of the poses will be computed
 grasp_postures_frame_id: arm_tool_link
 # Currently unused grasp quality to put in the message

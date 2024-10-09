@@ -222,7 +222,7 @@ ROS_INFO("DEBUG------ INIZIO CREAZIONE COLLISION OBJ");
 
   for(int i = 0; i < obj_num; ++i){
     // Define the object that we will be manipulating
-    collision_objects[i].header.frame_id = "odom";
+    collision_objects[i].header.frame_id = "map";
     collision_objects[i].id = object_names[i];
 
     ROS_INFO("DEBUG------OGGETTO %d ",i);
@@ -242,7 +242,7 @@ ROS_INFO("DEBUG------ INIZIO CREAZIONE COLLISION OBJ");
   ROS_INFO("DEBUG------INIZIO A METTER TAVOLO PICK");
   // Add the first table where the objects will originally be kept.
   collision_objects[obj_num].id = "table_pick"; //tavolo
-  collision_objects[obj_num].header.frame_id = "odom";
+  collision_objects[obj_num].header.frame_id = "map";
 
   /* Define the primitive and its dimensions. */
   collision_objects[obj_num].primitives.resize(1);
@@ -265,7 +265,7 @@ ROS_INFO("DEBUG------ INIZIO CREAZIONE COLLISION OBJ");
   ROS_INFO("DEBUG------INIZIO A METTERE TAVOLO PLACE");
   // Add the second table where we will be placing the objects.
   collision_objects[obj_num+1].id = "table_place"; //lavabo
-  collision_objects[obj_num+1].header.frame_id = "odom";
+  collision_objects[obj_num+1].header.frame_id = "map";
 
   /* Define the primitive and its dimensions. */
   collision_objects[obj_num+1].primitives.resize(1);
@@ -454,14 +454,14 @@ int pick_place_name(std::string name, bool tiago, bool pick){
     if(tiago){
       ret=sendPickGoal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back");  
     }else{
-      ret=sendPickGoal(object_names[i],pick_poses[i],"odom","table_pick");
+      ret=sendPickGoal(object_names[i],pick_poses[i],"map","table_pick");
     }
     
   }else{
     if(tiago){
       ret=sendPlaceGoal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back"); 
     }else{
-      ret=sendPlaceGoal(object_names[i],place_poses[i],"odom","table_place");
+      ret=sendPlaceGoal(object_names[i],place_poses[i],"map","table_place");
     }
   }
   return ret;
@@ -470,7 +470,7 @@ int pick_place_name(std::string name, bool tiago, bool pick){
 int move_objects(bool pick){
     if (pick){ //prendo dal tavolo e posiziono su tiago per il trasporto
         for (int i = 0; i < tiago_poses.size(); i++){
-            ret=sendPickGoal(object_names[i],pick_poses[i],"odom","table_pick");
+            ret=sendPickGoal(object_names[i],pick_poses[i],"map","table_pick");
             if(ret!=1){ //if not SUCCESS
                 return ret;
             }
@@ -485,7 +485,7 @@ int move_objects(bool pick){
             if(ret!=1){ //if not SUCCESS
                 return ret;
             }
-            ret=sendPlaceGoal(object_names[i],place_poses[i],"odom","table_place");
+            ret=sendPlaceGoal(object_names[i],place_poses[i],"map","table_place");
             if(ret!=1){ //if not SUCCESS
                 return ret;
             }

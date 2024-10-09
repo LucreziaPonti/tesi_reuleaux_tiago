@@ -1556,11 +1556,11 @@
      <!-- Objects on the table (0.55:1.15; -1.06:-1.69 ; +0.94)-->
     <include>
       <uri>model://pringles</uri>
-      <pose>0.8 -1.15 1 0 0 2.62</pose>
+      <pose>0.7 -1.13 1 0 0 2.62</pose>
     </include>
     <include>
       <uri>model://plate</uri>
-      <pose>1.1 -1.37 1 0 0 0</pose>
+      <pose>1 -1.37 1 0 0 0</pose>
     </include>
     <include>
       <uri>model://ceramic_bowl</uri>

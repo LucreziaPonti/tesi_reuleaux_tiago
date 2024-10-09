@@ -215,7 +215,7 @@ ROS_INFO("DEBUG------ INIZIO CREAZIONE COLLISION OBJ");
 
   for(int i = 0; i < obj_num; ++i){
     // Define the object that we will be manipulating
-    collision_objects[i].header.frame_id = "odom";
+    collision_objects[i].header.frame_id = "map";
     collision_objects[i].id = object_names[i];
 
     ROS_INFO("DEBUG------OGGETTO %d ",i);
@@ -242,7 +242,7 @@ ROS_INFO("DEBUG------ INIZIO CREAZIONE COLLISION OBJ");
   ROS_INFO("DEBUG------INIZIO A METTER TAVOLO PICK");
   // Add the first table where the objects will originally be kept.
   collision_objects[obj_num].id = "table_pick"; //tavolo
-  collision_objects[obj_num].header.frame_id = "odom";
+  collision_objects[obj_num].header.frame_id = "map";
 
   /* Define the primitive and its dimensions. */
   collision_objects[obj_num].primitives.resize(1);
@@ -256,7 +256,7 @@ ROS_INFO("DEBUG------ INIZIO CREAZIONE COLLISION OBJ");
   collision_objects[obj_num].primitive_poses.resize(1);
   collision_objects[obj_num].primitive_poses[0].position.x = 0.81;
   collision_objects[obj_num].primitive_poses[0].position.y = -1.4;
-  collision_objects[obj_num].primitive_poses[0].position.z = 0.47;
+  collision_objects[obj_num].primitive_poses[0].position.z = collision_objects[obj_num].primitives[0].dimensions[2]/2;
   collision_objects[obj_num].primitive_poses[0].orientation.w = 1.0;
   // END_SUB_TUTORIAL
 
@@ -265,7 +265,7 @@ ROS_INFO("DEBUG------ INIZIO CREAZIONE COLLISION OBJ");
   ROS_INFO("DEBUG------INIZIO A METTERE TAVOLO PLACE");
   // Add the second table where we will be placing the objects.
   collision_objects[obj_num+1].id = "table_place"; //lavabo
-  collision_objects[obj_num+1].header.frame_id = "odom";
+  collision_objects[obj_num+1].header.frame_id = "map";
 
   /* Define the primitive and its dimensions. */
   collision_objects[obj_num+1].primitives.resize(1);
@@ -349,7 +349,7 @@ int pick_place_name(std::string name, bool tiago, bool pick){
     if(tiago){
       pick_ac->sendGoal(crea_goal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back"));  
     }else{
-      pick_ac->sendGoal(crea_goal(object_names[i],pick_poses[i],"odom","table_pick"));
+      pick_ac->sendGoal(crea_goal(object_names[i],pick_poses[i],"map","table_pick"));
     }
     pick_ac->waitForResult();
     if(pick_ac->getState() == actionlib::SimpleClientGoalState::ABORTED){
@@ -359,7 +359,7 @@ int pick_place_name(std::string name, bool tiago, bool pick){
     if(tiago){
       place_ac->sendGoal(crea_goal(object_names[i],tiago_poses[i],"torso_lift_link","tiago_back"));  
     }else{
-      place_ac->sendGoal(crea_goal(object_names[i],place_poses[i],"odom","table_place"));
+      place_ac->sendGoal(crea_goal(object_names[i],place_poses[i],"map","table_place"));
     }
     place_ac->waitForResult();
     if(place_ac->getState() == actionlib::SimpleClientGoalState::ABORTED){
@@ -372,7 +372,7 @@ int pick_place_name(std::string name, bool tiago, bool pick){
 int move_objects(bool pick){
   if (pick){ //prendo dal tavolo e posiziono su tiago per il trasporto
     for (int i = 0; i < object_names.size(); i++){
-      pick_ac->sendGoal(crea_goal(object_names[i],pick_poses[i],"odom","table_pick"));
+      pick_ac->sendGoal(crea_goal(object_names[i],pick_poses[i],"map","table_pick"));
       pick_ac->waitForResult();
       if(pick_ac->getState() == actionlib::SimpleClientGoalState::ABORTED){
         return moveit_msgs::MoveItErrorCodes::FAILURE;
@@ -390,7 +390,7 @@ int move_objects(bool pick){
       if(pick_ac->getState() == actionlib::SimpleClientGoalState::ABORTED){
         return moveit_msgs::MoveItErrorCodes::FAILURE;
       }
-      place_ac->sendGoal(crea_goal(object_names[i],place_poses[i],"odom","table_place"));
+      place_ac->sendGoal(crea_goal(object_names[i],place_poses[i],"map","table_place"));
       place_ac->waitForResult();
       if(place_ac->getState() == actionlib::SimpleClientGoalState::ABORTED){
         return moveit_msgs::MoveItErrorCodes::FAILURE;

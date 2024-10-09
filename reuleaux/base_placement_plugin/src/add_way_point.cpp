@@ -709,7 +709,7 @@ void AddWayPoint::getRobotModelFrame_slot(const tf::Transform end_effector)
      the RQT Widget.
   */
 
-  target_frame_.assign("odom");
+  target_frame_.assign("map");
   ROS_INFO_STREAM("The robot model frame is: " << target_frame_);
 
   box_pos = end_effector;

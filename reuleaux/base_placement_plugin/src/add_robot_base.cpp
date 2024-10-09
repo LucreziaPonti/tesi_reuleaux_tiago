@@ -78,7 +78,7 @@ void AddRobotBase::init()
   trns.setRotation(quat);
 
   box_pos = trns;
-  target_frame_.assign("odom");
+  target_frame_.assign("map");
   ROS_INFO_STREAM("The robot model frame is: " << target_frame_);
   makeInteractiveMarker();
   server->applyChanges();
@@ -503,7 +503,7 @@ void AddRobotBase::clearAllPointsRviz()
 
 void AddRobotBase::getRobotModelFrame_slot(const tf::Transform end_effector)
 {
-  target_frame_.assign("odom");
+  target_frame_.assign("map");
   ROS_INFO_STREAM("The robot model frame is: " << target_frame_);
   box_pos = end_effector;
   clearAllPointsRviz();

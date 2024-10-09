@@ -823,7 +823,7 @@ void PlaceBase::showBaseLocationsbyArrow(std::vector< geometry_msgs::Pose > po)
   {
     ROS_INFO("////debug----------------------------------------------MARKER ARRAY %d",i);
     visualization_msgs::Marker marker;
-    marker.header.frame_id = "odom";
+    marker.header.frame_id = "map";
     marker.header.stamp = ros::Time::now();
     marker.ns = "points";
     marker.action = visualization_msgs::Marker::ADD;
