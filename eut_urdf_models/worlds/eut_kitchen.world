@@ -1560,7 +1560,7 @@
     </include>
     <include>
       <uri>model://plate</uri>
-      <pose>1 -1.37 1 0 0 0</pose>
+      <pose>1.1 -1.4 1 0 0 0</pose>
     </include>
     <include>
       <uri>model://ceramic_bowl</uri>

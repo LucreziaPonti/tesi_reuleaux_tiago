@@ -6,12 +6,16 @@
   <arg name="place_yaml"  default="prima_prova_task"/>
   <arg name="tiago_yaml"  default="tiago_poses_2"/>
   
-  <rosparam command="load" file="$(find tiago_pick_and_place)/config/pick_and_place_params.yaml" />
-  < Load definition of pregrasp motion into play_motion namespace >
+  <!-- Load definition of pregrasp motion into play_motion namespace -->
   <rosparam command="load" file="$(find tiago_pick_and_place)/config/pick_motions.yaml" /> 
 
+  <!-- Pick & place server -->
+  <node name="pick_place_server" pkg="tiago_pick_and_place" type="pick_place_server" output="screen">
+      <rosparam command="load" file="$(find tiago_pick_and_place)/config/pick_and_place_params.yaml" />
+  </node>
+
   <!-- Node exposing service to start looking for the object and trigger the picking -->
-  <node name="pick_place_server" pkg="tiago_pick_and_place" type="pick_place_server" output="screen">  
+  <node name="pick_place_handler" pkg="tiago_pick_and_place" type="pick_place_handler" output="screen">  
     <rosparam command="load" ns="pick_task"  file="$(find base_placement_plugin)/saved_tasks/$(arg pick_yaml).yaml" />
     <rosparam command="load" ns="place_task"  file="$(find base_placement_plugin)/saved_tasks/$(arg place_yaml).yaml" />
     <rosparam command="load" ns="tiago_task"  file="$(find tiago_pick_and_place)/config/$(arg tiago_yaml).yaml" />
