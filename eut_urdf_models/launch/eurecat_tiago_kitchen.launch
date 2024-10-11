@@ -3,7 +3,7 @@
 <launch>
 
 
-    <arg name="path_to_pkg" default="/home/lucry_wsl20/catkin_ws/src/tesi_reuleaux_tiago" doc="ws folder need to be included in the path to find the models"/>
+    <arg name="path_to_pkg" default="/home/oem/catkin_ws/src/tesi_reuleaux_tiago" doc="ws folder need to be included in the path to find the models"/>
 
 
     

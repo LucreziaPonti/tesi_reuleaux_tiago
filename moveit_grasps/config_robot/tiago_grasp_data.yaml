@@ -1,7 +1,7 @@
 base_link: 'base_footprint'
 # =====================================================
 # Note: these parameters are copied from Robotiq gripper without tweaking
-hand:
+gripper:
     end_effector_name: 'gripper'  # ee group name
     end_effector_type: 'finger'  # 'finger' or 'suction'
 

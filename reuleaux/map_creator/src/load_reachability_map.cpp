@@ -35,7 +35,13 @@ int main(int argc, char **argv)
     // Creating messages
     map_creator::WorkSpace ws;
     ws.header.stamp = ros::Time::now();
-    ws.header.frame_id = "torso_lift_link";
+    if (argc < 3){
+    	ROS_INFO_STREAM("NO ADDITIONAL ARG - THE MAP IS ASSUMED TO BE FROM MAP_CREATOR - FRAME ID SET TO torso_lift_link");
+    	ws.header.frame_id = "base_footprint";
+    }else{
+    	ROS_INFO_STREAM("ADDITIONAL ARG USED - THE MAP IS ASSUMED TO BE FROM MAP_GENERATION - FRAME ID SET TO base_footprint");
+    	ws.header.frame_id = "base_footprint";
+    }
     ws.resolution = res;
 
     for (MapVecDoublePtr::iterator it = sphere_col.begin(); it != sphere_col.end(); ++it)

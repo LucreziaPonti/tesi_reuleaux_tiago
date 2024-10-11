@@ -3,11 +3,11 @@
 
 <!--set you robot's moveit pkg here-->
 <arg name = "moveit_pkg" default="tiago_moveit_config"/>
-<arg name = "resolution" default="0.08"/>
+<arg name = "resolution" default="0.15"/>
 <arg name = "group" default="arm"/>
 
 <!--Launch moveit required pkgs for your robot-->
-<include file="$(arg moveit_pkg)/launch/demo.launch">
+<include file="$(find tiago_moveit_config)/launch/demo.launch">
     <arg name="rviz" value="false"/>
 </include>
 
@@ -19,7 +19,7 @@
   <param name="resolution" value="$(arg resolution)" />
   <param name="radius" value="1" />
   <param name="check_collision" value="true"/>
-  <param name="path" value="$(find map_creator)/maps/" />
+  <param name="path" value="$(find map_generator)/maps/" />
   <param name="filename" value="default" />
 
 </node>
