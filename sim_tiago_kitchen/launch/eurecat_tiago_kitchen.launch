@@ -16,7 +16,7 @@
     
 
     <!-- start up world -->
-    <include file="$(find eut_urdf_models)/launch/kitchen_gazebo.launch">
+    <include file="$(find sim_tiago_kitchen)/launch/kitchen_gazebo.launch">
         <arg name="path_to_pkg" value="$(arg path_to_pkg)"/>
         <arg name="gui" value="true"/>
     </include>
@@ -24,7 +24,7 @@
 
     <!-- spawn robot in simulation -->
     <arg name="namespace" default="/"/>    
-    <include file="$(find eut_urdf_models)/launch/tiago.launch" ns="$(arg namespace)">
+    <include file="$(find sim_tiago_kitchen)/launch/tiago.launch" ns="$(arg namespace)">
         <arg name="gzpose" value="$(arg gzpose)"/>
         <arg name="public_sim" value="$(arg public_sim)"/>
         <arg name="end_effector" value="$(arg tiago_ee)"/>

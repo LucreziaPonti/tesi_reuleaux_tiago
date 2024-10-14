@@ -11,6 +11,6 @@ rosrun map_creator create_inverse_reachability_map *nameRM*.h5 *nameIRM*.h5
 rosrun map_creator load_reachability_map .src/tesi_reuleaux_tiago/reuleaux/map_creator/maps/tiago_terza_prova.h5
 
 roslaunch tiago_gazebo tiago_gazebo.launch public_sim:=true end_effector:=pal-gripper
-roslaunch eut_urdf_models eurecat_tiago_kitchen.launch
+roslaunch sim_tiago_kitchen eurecat_tiago_kitchen.launch
 
 roslaunch base_placement_plugin base_placement.launch

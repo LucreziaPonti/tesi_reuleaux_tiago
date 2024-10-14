@@ -17,13 +17,13 @@
         <visual name="">
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_kitchen.obj" scale="100.0 100.0 100.0"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_kitchen.obj" scale="100.0 100.0 100.0"/>
             </geometry>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_kitchen.obj" scale="100.0 100.0 100.0"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_kitchen.obj" scale="100.0 100.0 100.0"/>
             </geometry>
         </collision>
     </link>  
@@ -46,13 +46,13 @@
         <visual name="">
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_1.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_1.obj"/>
             </geometry>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_1.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_1.obj"/>
             </geometry>
         </collision>
     </link>    
@@ -74,13 +74,13 @@
         <visual name="">
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_2.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_2.obj"/>
             </geometry>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_2.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_2.obj"/>
             </geometry>
         </collision>
     </link>    
@@ -104,13 +104,13 @@
         <visual name="">
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_grande.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_grande.obj"/>
             </geometry>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cajon_grande.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_grande.obj"/>
             </geometry>
         </collision>
     </link>
@@ -134,13 +134,13 @@
         <visual name="">
             <origin xyz="0.3 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_armario_lavamanos.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_armario_lavamanos.obj"/>
             </geometry>
         </visual>
         <collision>
             <origin xyz="0.3 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_armario_lavamanos.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_armario_lavamanos.obj"/>
             </geometry>
         </collision>
     </link>  
@@ -163,13 +163,13 @@
         <visual name="">
             <origin xyz="0.0 0.0 0.254" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_puerta_lavavajillas.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_puerta_lavavajillas.obj"/>
             </geometry>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.254" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_puerta_lavavajillas.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_puerta_lavavajillas.obj"/>
             </geometry>
         </collision>
     </link> 
@@ -191,13 +191,13 @@
         <visual name="">
             <origin xyz="-0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_lavadora.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_lavadora.obj"/>
             </geometry>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_lavadora.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_lavadora.obj"/>
             </geometry>
         </collision>
     </link>  
@@ -220,13 +220,13 @@
         <visual name="">
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj"/>
             </geometry>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj"/>
             </geometry>
         </collision>
     </link>   
@@ -249,13 +249,13 @@
         <visual name="">
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj"/>
             </geometry>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj"/>
             </geometry>
         </collision>
     </link> 
@@ -278,13 +278,13 @@
         <visual name="">
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj"/>
             </geometry>
         </visual>
         <collision>
             <origin xyz="0.0 0.0 0.0" rpy="1.5714 0.0 0.0"/>
             <geometry>
-                <mesh filename="package://eut_urdf_models/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj"/>
+                <mesh filename="package://sim_tiago_kitchen/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj"/>
             </geometry>
         </collision>
     </link>

@@ -1,0 +1,68 @@
+cmake_minimum_required(VERSION 3.0.2)
+project(sim_tiago_kitchen)
+
+## Compile as C++11, supported in ROS Kinetic and newer
+# add_compile_options(-std=c++11)
+
+## Find catkin macros and libraries
+## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
+## is used, also find other catkin packages
+find_package(catkin REQUIRED COMPONENTS
+  urdf
+  geometry_msgs
+  moveit_msgs
+  roscpp
+  moveit_ros_planning_interface
+  gazebo_ros
+  std_msgs
+  std_srvs
+)
+
+
+################################################
+## Declare ROS messages, services and actions ##
+################################################
+
+# Generate messages in the 'msg' folder
+ #add_message_files(
+  # FILES
+#
+ #)
+
+## Generate services in the 'srv' folder
+# add_service_files(
+#   FILES
+#   Service1.srv
+#   Service2.srv
+# )
+
+## Generate actions in the 'action' folder
+# add_action_files(
+#   FILES
+#   Action1.action
+#   Action2.action
+# )
+
+# Generate added messages and services with any dependencies listed here
+ generate_messages(
+   DEPENDENCIES
+   std_msgs  geometry_msgs # Or other packages containing msgs
+ )
+
+
+catkin_package(
+)
+
+include_directories(
+  ${catkin_INCLUDE_DIRS} 
+)
+
+# Add your executable
+add_executable(load_kitchen_planning_scene src/load_kitchen_planning_scene.cpp)
+# Link against the required libraries
+target_link_libraries(load_kitchen_planning_scene  ${catkin_LIBRARIES})
+# Install targets
+install(TARGETS load_kitchen_planning_scene  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+install(DIRECTORY launch 
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

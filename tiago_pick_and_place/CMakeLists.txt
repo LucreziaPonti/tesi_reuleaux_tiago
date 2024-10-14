@@ -61,13 +61,6 @@ target_link_libraries(pick_place_server_full  ${catkin_LIBRARIES})
 # Install targets
 install(TARGETS pick_place_server_full  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
-# Add your executable
-add_executable(load_kitchen_planning_scene src/load_kitchen_planning_scene.cpp)
-# Link against the required libraries
-target_link_libraries(load_kitchen_planning_scene  ${catkin_LIBRARIES})
-# Install targets
-install(TARGETS load_kitchen_planning_scene  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-
 
 install(DIRECTORY launch config
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

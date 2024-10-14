@@ -1,7 +1,6 @@
 
 // ROS
 #include <ros/ros.h>
-#include <XmlRpcValue.h>
 
 // MoveIt
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
@@ -11,6 +10,7 @@
 #include <shape_msgs/SolidPrimitive.h>
 
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_ros/transform_listener.h>
 
 geometry_msgs::Pose getModelPose( float x,float y,float z,float Rx,float Ry,float Rz){
         geometry_msgs::Pose point;
@@ -29,7 +29,14 @@ int main(int argc, char** argv)
   ros::NodeHandle nh;
   ros::AsyncSpinner spinner(1);
   spinner.start();
-  
+  tf2_ros::Buffer tfBuffer;
+  tf2_ros::TransformListener tfListener(tfBuffer);
+  try{
+    tfBuffer.lookupTransform("odom", "map", ros::Time::now(), ros::Duration(3.0));
+  } catch (tf2::TransformException &ex) {
+    ROS_WARN("Could NOT transform odom to map: %s", ex.what());
+  }
+
   //LOAD OGGETTI
   int obj_num=4; 
   std::vector<std::string> object_names;

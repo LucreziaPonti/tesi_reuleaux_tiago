@@ -23,7 +23,7 @@
         <geometry>
           <mesh>
             <scale>100 100 100</scale>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/sink/kitchen_only_kitchen.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_kitchen.obj</uri>
           </mesh>
         </geometry>
         <material>
@@ -37,7 +37,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/sink/kitchen_only_lavadora.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_lavadora.obj</uri>
           </mesh>
         </geometry>
         <material>
@@ -69,7 +69,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj</uri>
           </mesh>
         </geometry>
         <material>
@@ -83,7 +83,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj</uri>
           </mesh>
         </geometry>
         <material>
@@ -115,7 +115,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj</uri>
           </mesh>
         </geometry>
         <material>
@@ -147,7 +147,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/sink/kitchen_only_armario_lavamanos.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_armario_lavamanos.obj</uri>
           </mesh>
         </geometry>
         <material>
@@ -179,7 +179,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/sink/kitchen_only_puerta_lavavajillas.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_puerta_lavavajillas.obj</uri>
           </mesh>
         </geometry>
         <material>
@@ -211,7 +211,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cajon_1.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_1.obj</uri>
           </mesh>
         </geometry>
         <material>
@@ -243,7 +243,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cajon_2.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_2.obj</uri>
           </mesh>
         </geometry>
         <material>
@@ -275,7 +275,7 @@
         <geometry>
           <mesh>
             <scale>1 1 1</scale>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cajon_grande.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_grande.obj</uri>
           </mesh>
         </geometry>
         <material>

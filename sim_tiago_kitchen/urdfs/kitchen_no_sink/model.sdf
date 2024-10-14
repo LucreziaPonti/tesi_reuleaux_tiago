@@ -23,7 +23,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/bin/bin.dae</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/bin/bin.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -50,7 +50,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/bin/bin.dae</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/bin/bin.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -123,7 +123,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/bookshelve/bookshelve.dae</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/bookshelve/bookshelve.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -150,7 +150,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/bookshelve/bookshelve.dae</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/bookshelve/bookshelve.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -223,7 +223,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/table/table.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/table/table.obj</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -250,7 +250,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/table/table.obj</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/table/table.obj</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -318,7 +318,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/chair/chair.dae</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/chair/chair.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -339,7 +339,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/chair/chair.dae</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/chair/chair.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -407,7 +407,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/chair/chair.dae</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/chair/chair.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
@@ -428,7 +428,7 @@
         <pose>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/nhoa_ws/src/eut_urdf_models/meshes/chair/chair.dae</uri>
+            <uri>/nhoa_ws/src/sim_tiago_kitchen/meshes/chair/chair.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>

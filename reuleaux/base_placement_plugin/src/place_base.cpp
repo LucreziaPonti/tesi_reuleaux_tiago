@@ -449,7 +449,6 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
 
       if(selected_method_ == 3) //// findBaseByVerticalRobotModel - devo estendere alla base del robot (dalla base del braccio)
       {
-      ROS_INFO("////debug-----------------------------------------FIND BASE - VERTICAL ROBOT MODEL - NO USER INT");
         transformToRobotbase(PoseColFilter, robot_PoseColfilter);
         sd.associatePose(baseTrnsCol, grasp_poses, robot_PoseColfilter, res); //create a point cloud which consists of all of the possible base locations for all grasp poses and a list of base pose orientations
         ROS_INFO("Size of baseTrnsCol dataset: %lu", baseTrnsCol.size());
@@ -458,7 +457,6 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
 
       else
       {
-        ROS_INFO("////debug---------------------------------------FIND BASE - ALTRI METODI DI CALCOLO");
         sd.associatePose(baseTrnsCol, grasp_poses, PoseColFilter, res);
         ROS_INFO("Size of baseTrnsCol dataset: %lu", baseTrnsCol.size());
         createSpheres(baseTrnsCol, sphereColor, highScoreSp, false);
@@ -498,6 +496,8 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
   ROS_INFO("Best pose for this solution: Position: %f, %f, %f, Orientation: %f, %f, %f",
                  best_pose_.position.x, best_pose_.position.y, best_pose_.position.z, roll,pitch, yaw);
 
+  // CONTROLLA CHE CI SIA IL SERVIZIO BP TO NAV, SE C'È MANDA IL BP, SE NON C'È AMEN
+
   //double s = calculateScoreForRobotBase(GRASP_POSES_, final_base_poses);
   Q_EMIT basePlacementProcessCompleted(score_);
 
@@ -509,7 +509,6 @@ void PlaceBase::BasePlaceMethodHandler()
 {
   /* Switch cases for selecting method for base placement
   */
-  ROS_INFO("////debug----------------------------------------------BASE PLACEM METHOD HANDLER");
   switch (selected_method_)
   {
     case 0:
@@ -547,7 +546,6 @@ void PlaceBase::OuputputVizHandler(std::vector< geometry_msgs::Pose > po)
 {
   /* Switch cases for selecting output type for visualization
   */
-  ROS_INFO("////debug----------------------------------------------OUTPUT VIZ HANDLER");
   switch (selected_op_type_)
   {
     case 0:
@@ -599,6 +597,7 @@ void PlaceBase::findBaseByVerticalRobotModel()
     prob_base_pose.orientation.y = 0;
     prob_base_pose.orientation.z = 0;
     prob_base_pose.orientation.w = 1;
+    // AGGIUNGERE QUI IL FILTRAGGIO CON I COLLISION OBJECTS TRAMITE SERVIZIO CON IL NODO "FILTER_COLLISION_POSES" in reuleaux
     base_poses.push_back(prob_base_pose);
   }
 
@@ -778,10 +777,8 @@ void PlaceBase::showBaseLocationsbyArrow(std::vector< geometry_msgs::Pose > po)
   */
   ROS_INFO("Showing Base Locations by Arrow: Arrows are pointing in Z direction");
   std::vector<geometry_msgs::Pose> pose_arr;
-  ROS_INFO("////debug----------------------------------------------CREA POSE ARRAY %d",po.size());
   for(int i=0;i<po.size();i++)
   {
-    ROS_INFO("////debug----------------------------------------------INIZIO POSE ARRAY %d",i);
     tf2::Transform trns;
     tf2::Quaternion quat(po[i].orientation.x, po[i].orientation.y, po[i].orientation.z, po[i].orientation.w);
     tf2::Vector3 vec(po[i].position.x, po[i].position.y, po[i].position.z);
@@ -812,16 +809,13 @@ void PlaceBase::showBaseLocationsbyArrow(std::vector< geometry_msgs::Pose > po)
     new_pose.orientation.z = new_pose_quat[2];
     new_pose.orientation.w = new_pose_quat[3];
     pose_arr.push_back(new_pose);
-  ROS_INFO("////debug----------------------------------------------FINE POSE ARRAY %f %f %f %f %f %f %f ",new_pose_vec[0],new_pose_vec[1],new_pose_vec[2],new_pose_quat[0],new_pose_quat[1],new_pose_quat[2],new_pose_quat[3]);
   }
 
   ros::NodeHandle nh;
   ros::Publisher marker_pub = nh.advertise< visualization_msgs::MarkerArray >("visualization_marker_array", 1);
-  ROS_INFO("////debug----------------------------------------------crea viz marker array pub");
   visualization_msgs::MarkerArray markerArr;
   for (int i = 0; i < po.size(); ++i)
   {
-    ROS_INFO("////debug----------------------------------------------MARKER ARRAY %d",i);
     visualization_msgs::Marker marker;
     marker.header.frame_id = "map";
     marker.header.stamp = ros::Time::now();
@@ -843,7 +837,6 @@ void PlaceBase::showBaseLocationsbyArrow(std::vector< geometry_msgs::Pose > po)
     markerArr.markers.push_back(marker);
   }
   marker_pub.publish(markerArr);
-  ROS_INFO("////debug----------------------------------------------PUBBLICA MARKER ARRAY");
 
 }
 

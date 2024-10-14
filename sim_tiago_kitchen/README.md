@@ -32,7 +32,7 @@ export LIBGL_ALWAYS_SOFTWARE=1
 ```
 Build the package:
 ```
-catkin build eut_urdf_models
+catkin build sim_tiago_kitchen
 ```
 Also remember to source the workspace:
 ```
@@ -42,12 +42,12 @@ source devel/setup.bash
 To start the simulation for MAPPING you need to run the command:
 
 ```
-roslaunch eut_urdf_models tiago_mapping.launch public_sim:=true
+roslaunch sim_tiago_kitchen tiago_mapping.launch public_sim:=true
 ```
 To start the simulation for NAVIGATION, TESTING, or DEVELOPMENT you need to run the command:
 
 ```
-roslaunch eut_urdf_models tiago_navigation.launch map:=/tiago_public_ws/src/eut_urdf_models/maps/eut_kitchen public_sim:=true
+roslaunch sim_tiago_kitchen tiago_navigation.launch map:=/tiago_public_ws/src/sim_tiago_kitchen/maps/eut_kitchen public_sim:=true
 ```
 
 It is mandatory to define the public sim arguement.

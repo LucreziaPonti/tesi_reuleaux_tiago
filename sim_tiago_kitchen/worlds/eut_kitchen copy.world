@@ -119,7 +119,7 @@
           <geometry>
             <mesh>
               <scale>100 100 100</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_kitchen.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_kitchen.obj</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -141,7 +141,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_lavadora.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_lavadora.obj</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -163,7 +163,7 @@
           <geometry>
             <mesh>
               <scale>100 100 100</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_kitchen.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_kitchen.obj</uri>
             </mesh>
           </geometry>
         </visual>
@@ -172,7 +172,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_lavadora.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_lavadora.obj</uri>
             </mesh>
           </geometry>
         </visual>
@@ -219,7 +219,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -241,7 +241,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -263,7 +263,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_parte_de_abajo_lavavajillas.obj</uri>
             </mesh>
           </geometry>
         </visual>
@@ -272,7 +272,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cubiertos_lavavajillas.obj</uri>
             </mesh>
           </geometry>
         </visual>
@@ -319,7 +319,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -341,7 +341,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_parte_de_arriba_lavavajillas.obj</uri>
             </mesh>
           </geometry>
         </visual>
@@ -388,7 +388,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_armario_lavamanos.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_armario_lavamanos.obj</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -410,7 +410,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_armario_lavamanos.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_armario_lavamanos.obj</uri>
             </mesh>
           </geometry>
         </visual>
@@ -457,7 +457,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_puerta_lavavajillas.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_puerta_lavavajillas.obj</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -479,7 +479,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_puerta_lavavajillas.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_puerta_lavavajillas.obj</uri>
             </mesh>
           </geometry>
         </visual>
@@ -526,7 +526,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cajon_1.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_1.obj</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -548,7 +548,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cajon_1.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_1.obj</uri>
             </mesh>
           </geometry>
         </visual>
@@ -593,7 +593,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cajon_2.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_2.obj</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -615,7 +615,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cajon_2.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_2.obj</uri>
             </mesh>
           </geometry>
         </visual>
@@ -662,7 +662,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cajon_grande.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_grande.obj</uri>
             </mesh>
           </geometry>
           <max_contacts>10</max_contacts>
@@ -684,7 +684,7 @@
           <geometry>
             <mesh>
               <scale>1 1 1</scale>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/sink/kitchen_only_cajon_grande.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/sink/kitchen_only_cajon_grande.obj</uri>
             </mesh>
           </geometry>
         </visual>
@@ -946,7 +946,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/bin/bin.dae</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/bin/bin.dae</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -973,7 +973,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/bin/bin.dae</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/bin/bin.dae</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -1046,7 +1046,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/bookshelve/bookshelve.dae</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/bookshelve/bookshelve.dae</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -1073,7 +1073,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/bookshelve/bookshelve.dae</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/bookshelve/bookshelve.dae</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -1146,7 +1146,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/table/table.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/table/table.obj</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -1173,7 +1173,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/table/table.obj</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/table/table.obj</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -1242,7 +1242,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/chair/chair.dae</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/chair/chair.dae</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -1263,7 +1263,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/chair/chair.dae</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/chair/chair.dae</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -1335,7 +1335,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/chair/chair.dae</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/chair/chair.dae</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>
@@ -1356,7 +1356,7 @@
           <pose>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/tiago_public_ws/src/eut_urdf_models/meshes/chair/chair.dae</uri>
+              <uri>/tiago_public_ws/src/sim_tiago_kitchen/meshes/chair/chair.dae</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>

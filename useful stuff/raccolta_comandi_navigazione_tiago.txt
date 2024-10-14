@@ -13,10 +13,10 @@ roslaunch tiago_2dnav_gazebo tiago_navigation.launch public_sim:=true lost:=true
 **some maps are in: ./src/tesi_reuleaux_tiago/tiago/tiago_navigation/tiago_maps/configurations/... *
 
 NAVIGATION WITH THE EURECAT MAP
-*exactly same as pal but with pakage eut_urdf_models, the world:=eut_kitchen is already default*
-roslaunch eut_urdf_models tiago_navigation.launch public_sim:=true 
+*exactly same as pal but with pakage sim_tiago_kitchen, the world:=eut_kitchen is already default*
+roslaunch sim_tiago_kitchen tiago_navigation.launch public_sim:=true 
 
-roslaunch eut_urdf_models tiago_navigation.launch public_sim:=true lost:=true map:=./src/tesi_reuleaux_tiago/eut_urdf_models/maps/eut_kitchen
+roslaunch sim_tiago_kitchen tiago_navigation.launch public_sim:=true lost:=true map:=./src/tesi_reuleaux_tiago/sim_tiago_kitchen/maps/eut_kitchen
 
 
 !! CORRECT LOCALIZATION

@@ -39,7 +39,7 @@
 
   <group ns="$(arg namespace)">
 
-    <include file="$(find eut_urdf_models)/launch/eurecat_tiago_kitchen.launch"/>
+    <include file="$(find sim_tiago_kitchen)/launch/eurecat_tiago_kitchen.launch"/>
 
     <!--include file="$(find tiago_gazebo)/launch/tiago_gazebo.launch">
       <arg name="world"      value="$(arg world)"/>
