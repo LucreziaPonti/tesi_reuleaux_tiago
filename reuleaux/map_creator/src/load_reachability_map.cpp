@@ -36,11 +36,11 @@ int main(int argc, char **argv)
     map_creator::WorkSpace ws;
     ws.header.stamp = ros::Time::now();
     if (argc < 3){
-    	ROS_INFO_STREAM("NO ADDITIONAL ARG - THE MAP IS ASSUMED TO BE FROM MAP_CREATOR - FRAME ID SET TO torso_lift_link");
+    	ROS_INFO_STREAM("NO ADDITIONAL ARG - THE MAP IS ASSUMED TO BE FROM MAP_GENERATOR - FRAME ID SET TO base_footprint");
     	ws.header.frame_id = "base_footprint";
     }else{
-    	ROS_INFO_STREAM("ADDITIONAL ARG USED - THE MAP IS ASSUMED TO BE FROM MAP_GENERATION - FRAME ID SET TO base_footprint");
-    	ws.header.frame_id = "base_footprint";
+    	ROS_INFO_STREAM("ADDITIONAL ARG USED - THE MAP IS ASSUMED TO BE FROM MAP_CREATOR - FRAME ID SET TO torso_lift_link");
+    	ws.header.frame_id = "torso_lift_link";
     }
     ws.resolution = res;
 

@@ -11,5 +11,4 @@ arm_torso:
   goal_position_tolerance: 0.0001
   goal_orientation_tolerance: 0.001
 
-# ATTENZIONE: questo è un file fasullo messo come prova -- verrà sostituito con quello fatto bene 
 
