@@ -121,6 +121,7 @@ void Discretization::createPoses(const std::vector<geometry_msgs::Point> &center
      }
     ws_.WsSpheres.push_back(wsSphere);
   }
+  ws_.resolution=resolution_;
 }
 
 int Discretization::getNumOfPoses()

@@ -58,7 +58,7 @@ void mapGeneration::saveWorkspace()
   reuleaux::Hdf5Dataset* h5(new reuleaux::Hdf5Dataset(name));
   h5->save(filtered_ws_);
   ROS_INFO("%s saved to %s", filename.c_str(), path_.c_str());
- }
+}
 
 void mapGeneration::getArmPose(geometry_msgs::Pose& arm_pose)
 {
