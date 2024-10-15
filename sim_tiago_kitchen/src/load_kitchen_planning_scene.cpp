@@ -104,7 +104,6 @@ int main(int argc, char** argv)
     collision_objects[i].primitive_poses[0]=getModelPose(object_poses[i][0],object_poses[i][1],object_poses[i][2],object_poses[i][3],object_poses[i][4],object_poses[i][5]);
     collision_objects[i].primitive_poses[0].position.z=0.815+collision_objects[i].primitives[0].dimensions[0]/2;
     
-    // END_SUB_TUTORIAL
 
     collision_objects[i].operation = collision_objects[i].ADD;
     ROS_INFO("DEBUG------AGGIUNTO");
@@ -128,7 +127,6 @@ int main(int argc, char** argv)
   collision_objects[obj_num].primitive_poses[0].position.y = -1.4;
   collision_objects[obj_num].primitive_poses[0].position.z = collision_objects[obj_num].primitives[0].dimensions[2]/2;
   collision_objects[obj_num].primitive_poses[0].orientation.w = 1.0;
-  // END_SUB_TUTORIAL
 
   collision_objects[obj_num].operation = collision_objects[obj_num].ADD;
 
@@ -151,7 +149,6 @@ int main(int argc, char** argv)
   collision_objects[obj_num+1].primitive_poses[0].position.y = 1.5;
   collision_objects[obj_num+1].primitive_poses[0].position.z = 0.5;
   collision_objects[obj_num+1].primitive_poses[0].orientation.w = 1.0;
-  // END_SUB_TUTORIAL
 
   collision_objects[obj_num+1].operation = collision_objects[obj_num+1].ADD;
  
@@ -174,7 +171,6 @@ int main(int argc, char** argv)
   collision_objects[obj_num+2].primitive_poses[0].position.y = 0;
   collision_objects[obj_num+2].primitive_poses[0].position.z = 0;
   collision_objects[obj_num+2].primitive_poses[0].orientation.w = 1.0;
-  // END_SUB_TUTORIAL
 
   collision_objects[obj_num+2].operation = collision_objects[obj_num+2].ADD;
   ROS_INFO("DEBUG------FATTO METTO NELLA INTERFACE");

@@ -5,6 +5,7 @@
 #include <gazebo/physics/BoxShape.hh>
 #include <gazebo/physics/SphereShape.hh>
 #include <gazebo/physics/CylinderShape.hh>
+#include <gazebo/physics/MeshShape.hh>
 #include <gazebo/physics/Collision.hh>
 #include <gazebo/physics/World.hh>
 
@@ -158,7 +159,7 @@ shape_msgs::SolidPrimitive * GazeboObjectInfo::getSolidPrimitive(physics::Collis
     }
     else
     {
-        ROS_WARN("shape type %i of collision %s not supported. Using bounding box instead. ", c->GetShapeType(),c->GetName().c_str());
+        ROS_WARN("shape type %i of collision %s not supported. ", c->GetShapeType(),c->GetName().c_str());
         GzBox box = GetBoundingBox(*c);
         GzVector3 bb = GetBoundingBoxDimensions(box);
         if ((GetX(bb) < 1e-05) || (GetY(bb) < 1e-05) || (GetZ(bb) < 1e-05)){
@@ -170,9 +171,40 @@ shape_msgs::SolidPrimitive * GazeboObjectInfo::getSolidPrimitive(physics::Collis
         solid.dimensions[shape_msgs::SolidPrimitive::BOX_X]=GetX(bb);
         solid.dimensions[shape_msgs::SolidPrimitive::BOX_Y]=GetY(bb);
         solid.dimensions[shape_msgs::SolidPrimitive::BOX_Z]=GetZ(bb);
+        if(geom.has_mesh()){
+            ROS_INFO("shape type %i of collision %s has mesh", c->GetShapeType(),c->GetName().c_str());
+            solid.dimensions[shape_msgs::SolidPrimitive::BOX_X]=0;
+            solid.dimensions[shape_msgs::SolidPrimitive::BOX_Y]=0;
+            solid.dimensions[shape_msgs::SolidPrimitive::BOX_Z]=0;
+        }
     }
     //ROS_INFO_STREAM("Solid computed."<<std::endl<<solid);
     return new shape_msgs::SolidPrimitive(solid);
+}
+
+shape_msgs::Mesh * GazeboObjectInfo::getMeshShape(physics::CollisionPtr& c) {
+    shape_msgs::Mesh solid;
+    msgs::Geometry geom;
+    physics::ShapePtr shape=c->GetShape();
+    shape->FillMsg(geom);
+    if (geom.has_mesh()) {
+        //ROS_INFO("shape type %i of collision %s is a box! ", c->GetShapeType(), c->GetName().c_str());
+
+        const gazebo::physics::MeshShape * mesh=dynamic_cast<const physics::MeshShape*>(shape.get());
+        if (!mesh) {
+            ROS_ERROR("Dynamic cast failed for mesh shape");
+            return NULL;
+        }
+        std::string mesh_uri=mesh->GetMeshURI();
+        solid.SetMesh(mesh_uri,"",false); ////da errore qui
+    }
+    else
+    {
+        ROS_WARN("shape type %i of collision %s not supported. ", c->GetShapeType(),c->GetName().c_str());
+        return NULL;
+    }
+    //ROS_INFO_STREAM("Solid computed."<<std::endl<<solid);
+    return new shape_msgs::Mesh(solid);
 }
 
 
@@ -221,7 +253,6 @@ GazeboObjectInfo::ObjectMsg GazeboObjectInfo::createBoundingBoxObject(physics::M
             pose.orientation.z = GetZ(GetRot(coll_pose));
             pose.orientation.w = GetW(GetRot(coll_pose));
 
-            obj.primitive_poses.push_back(pose);
         
             if (!origin_init)
             {
@@ -235,19 +266,38 @@ GazeboObjectInfo::ObjectMsg GazeboObjectInfo::createBoundingBoxObject(physics::M
                     ROS_WARN("Skipping coll %s of link %s of model %s, could not get SolidPrimitive. ",c->GetName().c_str(),linkName.c_str(),obj.name.c_str());
                     continue;
                 }
+                if(solid->dimensions.size()==3){
+                    if(solid->dimensions[0]==0 && solid->dimensions[1]==0 && solid->dimensions[2]==0){
+                        ROS_INFO("attempting mesh");
+                        shape_msgs::Mesh * mesh_shape=getMeshShape(c);
+                        if (!mesh_shape) {
+                            ROS_WARN("Skipping coll %s of link %s of model %s, could not get Mesh. ",c->GetName().c_str(),linkName.c_str(),obj.name.c_str());
+                            continue;
+                        }
+                        obj.mesh_poses.push_back(pose);
+                        obj.mesh_origin = GazeboObjectInfo::ObjectMsg::ORIGIN_AVERAGE;
+                        obj.primitive_origin = GazeboObjectInfo::ObjectMsg::ORIGIN_UNDEFINED;
+                    }
+                }else{
+                    obj.primitives.push_back(*solid);
+                    delete solid;
+                    obj.primitive_poses.push_back(pose);
+                    obj.primitive_origin = GazeboObjectInfo::ObjectMsg::ORIGIN_AVERAGE;
+                    obj.mesh_origin = GazeboObjectInfo::ObjectMsg::ORIGIN_UNDEFINED;
+                }
 
-                obj.primitives.push_back(*solid);
-                delete solid;
-                obj.content=GazeboObjectInfo::ObjectMsg::SHAPE;
+
+               obj.content=GazeboObjectInfo::ObjectMsg::SHAPE; 
             }else {
                 obj.content=GazeboObjectInfo::ObjectMsg::POSE;
                 //ROS_INFO("Pub pose for %s (%s %s)",c->GetName().c_str(),link->GetName().c_str(),model->GetName().c_str());
+                obj.primitive_origin = GazeboObjectInfo::ObjectMsg::ORIGIN_AVERAGE;
+                obj.mesh_origin = GazeboObjectInfo::ObjectMsg::ORIGIN_UNDEFINED;
             }
         }
     }
 
-    obj.primitive_origin = GazeboObjectInfo::ObjectMsg::ORIGIN_AVERAGE;
-    obj.mesh_origin = GazeboObjectInfo::ObjectMsg::ORIGIN_UNDEFINED;
+    
 
     return obj;
 }

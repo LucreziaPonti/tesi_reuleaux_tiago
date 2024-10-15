@@ -5,8 +5,9 @@
 
     <arg name="path_to_pkg" default="/home/oem/catkin_ws/src/tesi_reuleaux_tiago" doc="ws folder need to be included in the path to find the models"/>
 
+    <!--arg name="extra_gazebo_args" default=""/-->
+    <arg name="extra_gazebo_args" default="-s libgazebo_world_plugin_loader.so"/>
 
-    
     <!--arg name="gzpose" default="-x -0.25 -y -1.5 -z 0.0 -R 0.0 -P 0.0 -Y 0.0"/-->
     <arg name="gzpose" default="-x 0 -y 0 -z 0.0 -R 0.0 -P 0.0 -Y 0.0"/>
     <arg name="public_sim" default="true"/>
@@ -18,6 +19,7 @@
     <!-- start up world -->
     <include file="$(find sim_tiago_kitchen)/launch/kitchen_gazebo.launch">
         <arg name="path_to_pkg" value="$(arg path_to_pkg)"/>
+        <arg name="extra_gazebo_args" value="$(arg extra_gazebo_args)"/>
         <arg name="gui" value="true"/>
     </include>
 

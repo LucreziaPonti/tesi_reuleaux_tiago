@@ -206,17 +206,18 @@ void PlaceBase::createSpheres(std::multimap< std::vector< double >, std::vector<
   {
     int num = basePoses.count(it->first);
     poseCount.push_back(num);
+    //// takes the values of the spheres (i think) and stores them into poseCount
   }
   std::vector<int>::const_iterator it;
   it = max_element(poseCount.begin(), poseCount.end());
   int max_number = *it;
   it = min_element(poseCount.begin(), poseCount.end());
   int min_number = *it;
-  if(reduce_D)
+  if(reduce_D) //// reduce_D=true -- "cuts" the sphere distribution of the IRM in the plane (from 3D to 2D) for VerticalRobotModel
   {
     for (std::multimap< std::vector< double >, std::vector< double > >::iterator it = basePoses.begin(); it != basePoses.end();++it)
     {
-      if((it->first)[2] < 0.051 && (it->first)[2] > -0.051)
+      if((it->first)[2] < 0.051 && (it->first)[2] > -0.051) //// spheres on the ground
       {
         geometry_msgs::Pose prob_base_pose;
         prob_base_pose.position.x = (it->first)[0];
@@ -233,34 +234,33 @@ void PlaceBase::createSpheres(std::multimap< std::vector< double >, std::vector<
           k.isIkSuccesswithTransformedBase(base_pose_at_arm, GRASP_POSES_[j], joint_soln, nsolns);
           num_of_solns +=nsolns;
         }
-
+        ////recomputes the reachability score of the spheres
         float d = (float(num_of_solns)/float(GRASP_POSES_.size()*8))*100;
         spColor.insert(std::pair< std::vector< double >, double >(it->first, double(d)));
-
+        //// stores it in a map associating score and pose
       }
      }
-   }
-
-  else{
-
-  //Determining color of spheres of 3d map
- for(std::multimap<std::vector<double>, std::vector<double> >::iterator it = basePoses.begin(); it!=basePoses.end();++it)
- {
-   float d = ((float(basePoses.count(it->first))- min_number)/ (max_number - min_number)) * 100;
-   if(d>1)
-   {
-     spColor.insert(std::pair< std::vector< double >, double >(it->first, double(d)));
-   }
- }
   }
- std::multiset<std::pair<double, std::vector<double> > > scoreWithSp;
+  else{ ////use the whole 3D distribution
+  //Determining color of spheres of 3d map
+    for(std::multimap<std::vector<double>, std::vector<double> >::iterator it = basePoses.begin(); it!=basePoses.end();++it)
+    {
+      float d = ((float(basePoses.count(it->first))- min_number)/ (max_number - min_number)) * 100;
+      if(d>1)
+      {
+        spColor.insert(std::pair< std::vector< double >, double >(it->first, double(d)));
+      }
+    }
+  }
+
+ std::multiset<std::pair<double, std::vector<double> > > scoreWithSp; ////ordered structure containing poses and scores ORDERED BY SCORE (low to high)
  for(std::map<std::vector<double>, double>::iterator it = spColor.begin(); it !=spColor.end();++it )
  {
    scoreWithSp.insert(std::pair<double, std::vector<double> >(it->second, it->first));
  }
  for (std::multiset< std::pair< double, std::vector< double > > >::reverse_iterator it = scoreWithSp.rbegin();it != scoreWithSp.rend(); ++it)
  {
-   highScoredSp.push_back(it->second);
+   highScoredSp.push_back(it->second); //// ordered structure containing poses and scores ORDERED BY SCORE (high to low)
  }
 
 }

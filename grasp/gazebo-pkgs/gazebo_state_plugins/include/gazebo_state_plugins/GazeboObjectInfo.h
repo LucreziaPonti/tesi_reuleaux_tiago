@@ -67,6 +67,7 @@ private:
 	void onWorldUpdate(); 
 
 	shape_msgs::SolidPrimitive * getSolidPrimitive(physics::CollisionPtr& c); 
+	//shape_msgs::Mesh * getMeshShape(physics::CollisionPtr& c); ////uncomment if use the version with meshes - not working as of now
 
 	//returns a model made up of its bounding boxes
 	ObjectMsg createBoundingBoxObject(physics::ModelPtr& model, bool include_shape);

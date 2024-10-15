@@ -40,6 +40,10 @@ include_directories(
   ${catkin_INCLUDE_DIRS} 
 )
 
+install(DIRECTORY launch config
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+
 # Add your executable
 add_executable(pick_place_server src/pick_place_server.cpp)
 # Link against the required libraries
@@ -62,6 +66,4 @@ target_link_libraries(pick_place_server_full  ${catkin_LIBRARIES})
 install(TARGETS pick_place_server_full  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 
-install(DIRECTORY launch config
-   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 

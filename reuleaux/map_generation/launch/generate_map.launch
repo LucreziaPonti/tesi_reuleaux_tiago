@@ -3,8 +3,8 @@
 
 <!--set you robot's moveit pkg here-->
 <arg name = "moveit_pkg" default="tiago_moveit_config"/>
-<arg name = "resolution" default="0.1"/>
-<arg name = "group" default="arm_torso"/>
+<arg name = "resolution" default="0.08"/>
+<arg name = "group" default="arm"/>
 
 <!--Launch moveit required pkgs for your robot-->
 <include file="$(find tiago_moveit_config)/launch/demo.launch">

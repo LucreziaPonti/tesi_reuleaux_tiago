@@ -43,7 +43,7 @@ void BasePlacementWidget::init()
   // QValidator *validator = new QIntValidator(1,100, this);
   // ui_.lnEdit_BaseLocSize->setValidator(validator);
   ui_.lnEdit_BaseLocSize->setValidator(new QIntValidator(1, 100, this));
-  ui_.lnEdit_SpSize->setValidator(new QIntValidator(1, 20, this));
+  ui_.lnEdit_SpSize->setValidator(new QIntValidator(1, 200, this));
 
   // set progress bar when loading way-points from a yaml file. Could be nice when loading large way-points files
   ui_.progressBar->setRange(0, 100);
