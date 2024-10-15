@@ -13,4 +13,4 @@ request_object_service: "/gazebo_objects/get_info"
 
 # frame of the objects poses that will be published.
 # Should usually be 'world'
-objects_frame_id: "world"
+objects_frame_id: "map"

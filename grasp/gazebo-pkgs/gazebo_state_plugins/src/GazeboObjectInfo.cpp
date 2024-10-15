@@ -140,7 +140,7 @@ shape_msgs::SolidPrimitive * GazeboObjectInfo::getSolidPrimitive(physics::Collis
         solid.dimensions[shape_msgs::SolidPrimitive::CYLINDER_HEIGHT]=cyl->GetLength();
         solid.dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS]=cyl->GetRadius();
     }
-    else if (geom.has_sphere())
+    /*else if (geom.has_sphere())
     {
         ROS_INFO("shape type %i of collision %s is a sphere! ", c->GetShapeType(), c->GetName().c_str());
 
@@ -155,7 +155,7 @@ shape_msgs::SolidPrimitive * GazeboObjectInfo::getSolidPrimitive(physics::Collis
         solid.type=shape_msgs::SolidPrimitive::SPHERE;
         solid.dimensions.resize(1);
         solid.dimensions[shape_msgs::SolidPrimitive::SPHERE_RADIUS] = sp->GetRadius();
-    }
+    }*/
     else
     {
         ROS_WARN("shape type %i of collision %s not supported. Using bounding box instead. ", c->GetShapeType(),c->GetName().c_str());
