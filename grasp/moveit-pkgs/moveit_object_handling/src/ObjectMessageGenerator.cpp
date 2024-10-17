@@ -310,6 +310,14 @@ void ObjectMessageGenerator::updatePose(const ObjectMsg& newObj, moveit_msgs::Co
 
     obj.header = newObj.header;
     obj.primitive_poses = newObj.primitive_poses;
+    //// fix primitive_pose z value for box primitives and x value for cylinder primitives
+    for (int i = 0; i < obj.primitive_poses.size(); i++){
+        if (obj.primitives[i].type==obj.primitives[i].CYLINDER){
+            obj.primitive_poses[i].position.x=obj.primitive_poses[i].position.x+obj.primitives[i].dimensions[obj.primitives[i].CYLINDER_RADIUS]/4;
+        }else if (obj.primitives[i].type==obj.primitives[i].BOX){
+            obj.primitive_poses[i].position.z=obj.primitive_poses[i].position.z+obj.primitives[i].dimensions[2]/2;
+        }        
+    }
     obj.mesh_poses = newObj.mesh_poses;
 }
 
@@ -327,6 +335,13 @@ moveit_msgs::CollisionObject ObjectMessageGenerator::transferContent(const Objec
 
     if (!skipGeometry) obj.primitives = msg.primitives;
     obj.primitive_poses = msg.primitive_poses;
+    for (int i = 0; i < obj.primitive_poses.size(); i++){
+        if (obj.primitives[i].type==obj.primitives[i].CYLINDER){
+            obj.primitive_poses[i].position.x=obj.primitive_poses[i].position.x+obj.primitives[i].dimensions[obj.primitives[i].CYLINDER_RADIUS]/4;
+        }else if (obj.primitives[i].type==obj.primitives[i].BOX){
+            obj.primitive_poses[i].position.z=obj.primitive_poses[i].position.z+obj.primitives[i].dimensions[2]/2;
+        }        
+    }
 
     if (!skipGeometry) obj.meshes = msg.meshes;
     obj.mesh_poses = msg.mesh_poses;
