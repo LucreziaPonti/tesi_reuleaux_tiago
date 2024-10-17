@@ -1,5 +1,0 @@
-<launch>
-	<include file="$(find grasp_execution)/launch/simple_grasp_action_server.launch">
-        <arg name="config_file" value="$(find grasp_execution_jaco_tutorial)/config/GraspActionServer.yaml"/>
-    </include>
-</launch>
