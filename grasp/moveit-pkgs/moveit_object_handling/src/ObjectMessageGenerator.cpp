@@ -340,7 +340,8 @@ moveit_msgs::CollisionObject ObjectMessageGenerator::transferContent(const Objec
             obj.primitive_poses[i].position.x=obj.primitive_poses[i].position.x+obj.primitives[i].dimensions[obj.primitives[i].CYLINDER_RADIUS]/4;
         }else if (obj.primitives[i].type==obj.primitives[i].BOX){
             obj.primitive_poses[i].position.z=obj.primitive_poses[i].position.z+obj.primitives[i].dimensions[2]/2;
-        }        
+        }   
+        ROS_INFO("POSES COLL OBJ %d: %f, %f, %f",i, obj.primitive_poses[i].position.x,obj.primitive_poses[i].position.y,obj.primitive_poses[i].position.z);    
     }
 
     if (!skipGeometry) obj.meshes = msg.meshes;

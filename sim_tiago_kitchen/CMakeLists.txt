@@ -16,6 +16,8 @@ find_package(catkin REQUIRED COMPONENTS
   gazebo_ros
   std_msgs
   std_srvs
+  actionlib
+  move_base_msgs
 )
 
 
@@ -63,6 +65,13 @@ add_executable(load_kitchen_planning_scene src/load_kitchen_planning_scene.cpp)
 target_link_libraries(load_kitchen_planning_scene  ${catkin_LIBRARIES})
 # Install targets
 install(TARGETS load_kitchen_planning_scene  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+# Add your executable
+add_executable(reuleaux_bp_to_nav src/reuleaux_bp_to_nav.cpp)
+# Link against the required libraries
+target_link_libraries(reuleaux_bp_to_nav  ${catkin_LIBRARIES})
+# Install targets
+install(TARGETS reuleaux_bp_to_nav  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 install(DIRECTORY launch 
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

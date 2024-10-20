@@ -39,7 +39,7 @@ set(base_placement_plugin_SRCS
   src/widgets/base_placement_widget.cpp
   src/place_base.cpp
   src/add_robot_base.cpp
-
+  src/filter_collision_poses.cpp
   
   ${MOC_FILES}
 )
@@ -51,6 +51,7 @@ set(base_placement_plugin_HDRS
   include/base_placement_plugin/widgets/base_placement_widget.h
   include/base_placement_plugin/place_base.h
   include/base_placement_plugin/add_robot_base.h
+  include/base_placement_plugin/filter_collision_poses.h
 )
 
 set(base_placement_plugin_UIS

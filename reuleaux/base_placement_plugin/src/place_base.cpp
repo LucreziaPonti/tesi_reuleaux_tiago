@@ -7,6 +7,7 @@
 #include <eigen_conversions/eigen_msg.h>
 
 #include <base_placement_plugin/place_base.h>
+#include <base_placement_plugin/filter_collision_poses.h>
 
 #include <octomap/octomap.h>
 #include <octomap/MapCollection.h>
@@ -402,6 +403,8 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
 
   Q_EMIT basePlacementProcessStarted();
   score_ = 0;
+  ros::NodeHandle n;
+  ros::Publisher bp_pub = n.advertise<geometry_msgs::Pose>("reuleaux_bp_to_nav/bp_poses", 1000);
   if (grasp_poses.size() == 0)
     ROS_ERROR_STREAM("Please provide atleast one grasp pose.");
 
@@ -419,6 +422,7 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
 
       double roll, pitch, yaw;
       m.getRPY(roll, pitch, yaw);
+      bp_pub.publish(final_base_poses[i]);
       ROS_INFO("Optimal base pose[%d]: Position: %f, %f, %f, Orientation: %f, %f, %f", i + 1,
                final_base_poses[i].position.x, final_base_poses[i].position.y, final_base_poses[i].position.z, roll,
                pitch, yaw);
@@ -426,17 +430,11 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
     OuputputVizHandler(final_base_poses);
 
 
-  }
+  }else  {
 
-  else
-  {
-
-    if (PoseColFilter.size() == 0)
-    {
+    if (PoseColFilter.size() == 0)    {
       ROS_INFO("No Inverse Reachability Map found. Please provide an Inverse Reachability map.");
-    }
-    else
-    {
+    }    else    {
       sphere_discretization::SphereDiscretization sd;
       baseTrnsCol.clear();
       sphereColor.clear();
@@ -447,16 +445,12 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
       final_base_poses.clear();
       GRASP_POSES_ = grasp_poses;
 
-      if(selected_method_ == 3) //// findBaseByVerticalRobotModel - devo estendere alla base del robot (dalla base del braccio)
-      {
+      if(selected_method_ == 3)       {//// findBaseByVerticalRobotModel - devo estendere alla base del robot (dalla base del braccio)
         transformToRobotbase(PoseColFilter, robot_PoseColfilter);
         sd.associatePose(baseTrnsCol, grasp_poses, robot_PoseColfilter, res); //create a point cloud which consists of all of the possible base locations for all grasp poses and a list of base pose orientations
         ROS_INFO("Size of baseTrnsCol dataset: %lu", baseTrnsCol.size());
         createSpheres(baseTrnsCol, sphereColor, highScoreSp, true);
-      }
-
-      else
-      {
+      }else{
         sd.associatePose(baseTrnsCol, grasp_poses, PoseColFilter, res);
         ROS_INFO("Size of baseTrnsCol dataset: %lu", baseTrnsCol.size());
         createSpheres(baseTrnsCol, sphereColor, highScoreSp, false);
@@ -468,7 +462,7 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
 
 
       BasePlaceMethodHandler();
-
+      
       for (int i = 0; i < final_base_poses.size(); ++i)
       {
         //Transforming the poses, as all are pointing towards
@@ -479,6 +473,7 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
 
         double roll, pitch, yaw;
         m.getRPY(roll, pitch, yaw);
+        bp_pub.publish(final_base_poses[i]);
         ROS_INFO("Optimal base pose[%d]: Position: %f, %f, %f, Orientation: %f, %f, %f", i + 1,
                  final_base_poses[i].position.x, final_base_poses[i].position.y, final_base_poses[i].position.z, roll,
                  pitch, yaw);
@@ -495,6 +490,11 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
   m.getRPY(roll, pitch, yaw);
   ROS_INFO("Best pose for this solution: Position: %f, %f, %f, Orientation: %f, %f, %f",
                  best_pose_.position.x, best_pose_.position.y, best_pose_.position.z, roll,pitch, yaw);
+  bp_pub.publish(best_pose_);
+
+  geometry_msgs::Pose stop;
+  bp_pub.publish(stop);
+  
 
   // CONTROLLA CHE CI SIA IL SERVIZIO BP TO NAV, SE C'È MANDA IL BP, SE NON C'È AMEN
 
@@ -587,7 +587,7 @@ void PlaceBase::findBaseByVerticalRobotModel()
   if(BASE_LOC_SIZE_>num_of_sp)
     ROS_ERROR("Desired base locations are too high. Please reduce it");
   //The iteration is taken 4 just to make sure that the robot models are not so close to each other
-  for(int i=0;i<num_of_desired_sp;i+=4)
+  for(int i=0;i<num_of_desired_sp;i+=2)
   {
     geometry_msgs::Pose prob_base_pose;
     prob_base_pose.position.x = highScoreSp[i][0];
@@ -597,12 +597,17 @@ void PlaceBase::findBaseByVerticalRobotModel()
     prob_base_pose.orientation.y = 0;
     prob_base_pose.orientation.z = 0;
     prob_base_pose.orientation.w = 1;
-    // AGGIUNGERE QUI IL FILTRAGGIO CON I COLLISION OBJECTS TRAMITE SERVIZIO CON IL NODO "FILTER_COLLISION_POSES" in reuleaux
-    base_poses.push_back(prob_base_pose);
+    ////FILTERING POSES TO AVOID COLLISION WITH OBJECTS IN THE SCENE
+    ros::NodeHandle nn;
+    FilterCollisionPoses filter;
+    if(filter.check_collision_objects(nn, prob_base_pose.position.x, prob_base_pose.position.y, prob_base_pose.position.z, false)){ 
+      //true = NOT IN COLLISION with any collision object of the planning scene -- acceptable base pos
+      base_poses.push_back(prob_base_pose);
+    } 
   }
 
   for(int i=0;i<BASE_LOC_SIZE_;++i)
-  {
+  { ////stores only the ones with highest score, as many as requested by user
     base_poses_user.push_back(base_poses[i]);
   }
 
@@ -626,18 +631,25 @@ void PlaceBase::findBaseByPCA()
     wss.point.x = highScoreSp[i][0];
     wss.point.y = highScoreSp[i][1];
     wss.point.z = highScoreSp[i][2];
-    std::vector< double > basePose;
-    basePose.push_back(highScoreSp[i][0]);
-    basePose.push_back(highScoreSp[i][1]);
-    basePose.push_back(highScoreSp[i][2]);
-    std::multimap< std::vector< double >, std::vector< double > >::iterator it;
-    for (it = baseTrnsCol.lower_bound(basePose); it != baseTrnsCol.upper_bound(basePose); ++it)
-    {
-      geometry_msgs::Pose pp;
-      sd.convertVectorToPose(it->second, pp);
-      wss.poses.push_back(pp);
+    
+    ////FILTERING POSES TO AVOID COLLISION WITH OBJECTS IN THE SCENE
+    ros::NodeHandle nn;
+    FilterCollisionPoses filter;
+    if(filter.check_collision_objects(nn, wss.point.x, wss.point.y, wss.point.z,true)){ 
+      //true = NOT IN COLLISION with any collision object of the planning scene -- acceptable base pos
+      std::vector< double > basePose;
+      basePose.push_back(highScoreSp[i][0]);
+      basePose.push_back(highScoreSp[i][1]);
+      basePose.push_back(highScoreSp[i][2]);
+      std::multimap< std::vector< double >, std::vector< double > >::iterator it;
+      for (it = baseTrnsCol.lower_bound(basePose); it != baseTrnsCol.upper_bound(basePose); ++it)
+      {
+        geometry_msgs::Pose pp;
+        sd.convertVectorToPose(it->second, pp);
+        wss.poses.push_back(pp);
+      }
+      ws.WsSpheres.push_back(wss);
     }
-    ws.WsSpheres.push_back(wss);
   }
 
   for (int i = 0; i < ws.WsSpheres.size(); ++i)
@@ -690,7 +702,14 @@ void PlaceBase::findBaseByGraspReachabilityScore()
     {
       geometry_msgs::Pose pp;
       sd.convertVectorToPose(it->second, pp);
-      probBasePoses.push_back(pp);
+      ////FILTERING POSES TO AVOID COLLISION WITH OBJECTS IN THE SCENE
+      ros::NodeHandle nn;
+      FilterCollisionPoses filter;
+      if(filter.check_collision_objects(nn, pp.position.x, pp.position.y, pp.position.z, true)){ 
+        //true = NOT IN COLLISION with any collision object of the planning scene -- acceptable base pos
+        probBasePoses.push_back(pp);
+      } 
+      
     }
     //std::multiset< std::pair< int, geometry_msgs::Pose > > basePoseWithHits;
     std::map<int, geometry_msgs::Pose> basePoseWithHits;
@@ -743,7 +762,13 @@ void PlaceBase::findBaseByIKSolutionScore()
     {
       geometry_msgs::Pose pp;
       sd.convertVectorToPose(it->second, pp);
-      probBasePoses.push_back(pp);
+      ////FILTERING POSES TO AVOID COLLISION WITH OBJECTS IN THE SCENE
+      ros::NodeHandle nn;
+      FilterCollisionPoses filter;
+      if(filter.check_collision_objects(nn, pp.position.x, pp.position.y, pp.position.z, true)){ 
+        //true = NOT IN COLLISION with any collision object of the planning scene -- acceptable base pos
+        probBasePoses.push_back(pp);
+      } 
     }
     //std::multiset< std::pair< int, geometry_msgs::Pose > > basePoseWithHits;
     std::map<double, geometry_msgs::Pose> basePoseWithHits;
@@ -942,7 +967,7 @@ void PlaceBase::ShowUnionMap(bool show_map)
     ros::Publisher workspace_pub = n.advertise< map_creator::WorkSpace >("reachability_map", 1);
     map_creator::WorkSpace ws;
     ws.header.stamp = ros::Time::now();
-    ws.header.frame_id = "base_footprint";
+    ws.header.frame_id = "map";
     ws.resolution = res;
 
     for (std::multimap< std::vector< double >, double >::iterator it = sphereColor.begin(); it != sphereColor.end(); ++it)
