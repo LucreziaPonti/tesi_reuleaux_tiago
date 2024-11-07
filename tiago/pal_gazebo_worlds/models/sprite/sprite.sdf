@@ -17,7 +17,7 @@
         <pose>0 0 0.075 3.1416 0 0</pose>
         <geometry>
           <cylinder>
-            <radius>0.04</radius>
+            <radius>0.032</radius>
             <length>0.15</length>
           </cylinder>
         </geometry>
@@ -35,7 +35,7 @@
         <pose>0 0 0.075 3.1416 0 0</pose>
         <geometry>
           <cylinder>
-            <radius>0.04</radius>
+            <radius>0.032</radius>
             <length>0.15</length>
           </cylinder>
         </geometry>

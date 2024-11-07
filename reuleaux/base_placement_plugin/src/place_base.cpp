@@ -200,8 +200,10 @@ void PlaceBase::setBasePlaceParams(int base_loc_size, int high_score_sp)
 void PlaceBase::createSpheres(std::multimap< std::vector< double >, std::vector< double > > basePoses,
                    std::map< std::vector< double >, double >& spColor, std::vector< std::vector< double > >& highScoredSp, bool reduce_D)
 {
+  ros::NodeHandle nn;
   kinematics::Kinematics k;
   std::vector<int> poseCount;
+  ROS_INFO("begin creating UNION MAP -- may take some time because of collision checking");
   poseCount.reserve(basePoses.size());
   for (std::multimap< std::vector< double >, std::vector< double > >::iterator it = basePoses.begin(); it != basePoses.end();++it)
   {
@@ -216,29 +218,36 @@ void PlaceBase::createSpheres(std::multimap< std::vector< double >, std::vector<
   int min_number = *it;
   if(reduce_D) //// reduce_D=true -- "cuts" the sphere distribution of the IRM in the plane (from 3D to 2D) for VerticalRobotModel
   {
+    ////!!! assuming that the union map content has already been transformed from arm_base (arm_1_link) to robot_base poses (base_footprint)
     for (std::multimap< std::vector< double >, std::vector< double > >::iterator it = basePoses.begin(); it != basePoses.end();++it)
     {
-      if((it->first)[2] < 0.051 && (it->first)[2] > -0.051) //// spheres on the ground
+      if((it->first)[2] < 0.06 && (it->first)[2] > -0.06) //// spheres on the ground 
       {
         geometry_msgs::Pose prob_base_pose;
         prob_base_pose.position.x = (it->first)[0];
         prob_base_pose.position.y = (it->first)[1];
         prob_base_pose.position.z = (it->first)[2];
         prob_base_pose.orientation.w = 1.0;
-        geometry_msgs::Pose base_pose_at_arm;
-        transformFromRobotbaseToArmBase(prob_base_pose, base_pose_at_arm);
-        int num_of_solns = 0;
-        for(int j=0;j<GRASP_POSES_.size();j++)
-        {
-          std::vector<double> joint_soln;
-          int nsolns = 0;
-          k.isIkSuccesswithTransformedBase(base_pose_at_arm, GRASP_POSES_[j], joint_soln, nsolns);
-          num_of_solns +=nsolns;
+        
+        ////FILTERING POSES TO AVOID COLLISION WITH OBJECTS IN THE SCENE
+        FilterCollisionPoses filter;
+        if(filter.check_collision_objects(nn, prob_base_pose.position.x, prob_base_pose.position.y, prob_base_pose.position.z, false)){ 
+          //true = NOT IN COLLISION with any collision object of the planning scene -- acceptable base pos
+          geometry_msgs::Pose base_pose_at_arm;
+          transformFromRobotbaseToArmBase(prob_base_pose, base_pose_at_arm);
+          int num_of_solns = 0;
+          for(int j=0;j<GRASP_POSES_.size();j++)
+          {
+            std::vector<double> joint_soln;
+            int nsolns = 0;
+            k.isIkSuccesswithTransformedBase(base_pose_at_arm, GRASP_POSES_[j], joint_soln, nsolns);
+            num_of_solns +=nsolns;
+          }
+          ////recomputes the reachability score of the spheres
+          float d = (float(num_of_solns)/float(GRASP_POSES_.size()*8))*100;
+          spColor.insert(std::pair< std::vector< double >, double >(it->first, double(d)));
+          //// stores it in the union map associating score and pose
         }
-        ////recomputes the reachability score of the spheres
-        float d = (float(num_of_solns)/float(GRASP_POSES_.size()*8))*100;
-        spColor.insert(std::pair< std::vector< double >, double >(it->first, double(d)));
-        //// stores it in a map associating score and pose
       }
      }
   }
@@ -246,10 +255,18 @@ void PlaceBase::createSpheres(std::multimap< std::vector< double >, std::vector<
   //Determining color of spheres of 3d map
     for(std::multimap<std::vector<double>, std::vector<double> >::iterator it = basePoses.begin(); it!=basePoses.end();++it)
     {
-      float d = ((float(basePoses.count(it->first))- min_number)/ (max_number - min_number)) * 100;
-      if(d>1)
-      {
-        spColor.insert(std::pair< std::vector< double >, double >(it->first, double(d)));
+      geometry_msgs::Pose prob_base_pose;
+      prob_base_pose.position.x = (it->first)[0];
+      prob_base_pose.position.y = (it->first)[1];
+      prob_base_pose.position.z = (it->first)[2];
+      ///FILTERING POSES TO AVOID COLLISION WITH OBJECTS IN THE SCENE AND SATISFY ROBOT CONSTRAINTS (for tiago=torso's height)
+      FilterCollisionPoses filter;
+      if(filter.check_collision_objects(nn, prob_base_pose.position.x, prob_base_pose.position.y, prob_base_pose.position.z, true)){ 
+        //true = NOT IN COLLISION with any collision object of the planning scene -- acceptable base pos
+        float d = ((float(basePoses.count(it->first))- min_number)/ (max_number - min_number)) * 100;
+        if(d>1){
+          spColor.insert(std::pair< std::vector< double >, double >(it->first, double(d)));
+        }
       }
     }
   }
@@ -263,7 +280,7 @@ void PlaceBase::createSpheres(std::multimap< std::vector< double >, std::vector<
  {
    highScoredSp.push_back(it->second); //// ordered structure containing poses and scores ORDERED BY SCORE (high to low)
  }
-
+  ROS_INFO("finished creating UNION MAP");
 }
 
 
@@ -272,11 +289,13 @@ double PlaceBase::calculateScoreForRobotBase(std::vector<geometry_msgs::Pose> &g
   kinematics::Kinematics k;
   float total_score = 0;
   float max_score = 0;
+  ROS_DEBUG(" inizio calc score. con %d poses",base_poses.size());
   geometry_msgs::Pose best_pose;
   for(int i=0;i<base_poses.size();i++)
   {
     geometry_msgs::Pose base_pose_at_arm;
     transformFromRobotbaseToArmBase(base_poses[i], base_pose_at_arm);
+    ROS_DEBUG("trasformo base pose %d a arm pose",i);
     int num_of_solns = 0;
     for(int j=0;j<grasp_poses.size();j++)
     {
@@ -286,15 +305,19 @@ double PlaceBase::calculateScoreForRobotBase(std::vector<geometry_msgs::Pose> &g
       num_of_solns +=nsolns;
     }
     float d = (float(num_of_solns)/float(grasp_poses.size()*8))*100;
+    ROS_DEBUG("calcolo score %d : %f",i,d);
     if(d>max_score)
     {
       max_score = d;
       best_pose = base_poses[i];
+      ROS_DEBUG("base pose %d è la best per ora",i);
     }
     total_score +=d;
   }
+  ROS_DEBUG("total score= %f",total_score);
   best_pose_ = best_pose;
   double score = double(total_score/float(base_poses.size()));
+  ROS_DEBUG(" score= %f",score);
   return score;
 }
 
@@ -339,9 +362,10 @@ void PlaceBase::transformFromRobotbaseToArmBase(const geometry_msgs::Pose& base_
   moveit::core::RobotStatePtr robot_state_(new moveit::core::RobotState(robot_model_));
   ////Get the link names (of all links)
   std::vector<std::string> full_link_names = robot_model_->getLinkModelNames();
-  ////find the index of the first link of the arm inside the entire list of link names
+  ////find the index of the first link of the arm inside the entire list of link names (for tiago - arm_1_link)
   int position = std::find(full_link_names.begin(), full_link_names.end(), arm_link_names[0]) -full_link_names.begin() ;
-  ////get the "Global transform" to the link = transform from the fixed frame
+  ////get the "Global transform" to the parent link of the arm (for tiago - torso_lift_link)
+  //// !!!!!! need the robot root frame to be coinciding to the global fixed frame
   const Eigen::Affine3d trans_to_arm_parent = robot_state_->getGlobalLinkTransform(full_link_names[position-1]);
   Eigen::Affine3d base_pose_tf; //Affine3d is a Pose type message(contains a Vector 3d and Quaterniond/RotationMatrix). 
   ////change the pose info of the base pose computed into a tf
@@ -361,12 +385,13 @@ void PlaceBase::transformToRobotbase(std::multimap< std::vector< double >, std::
   const std::vector<std::string>& arm_link_names = robot_jmp->getLinkModelNames();
   ////robot state/configuration(?)
   moveit::core::RobotStatePtr robot_state_(new moveit::core::RobotState(robot_model_));
-  ////transform from global frame to "root link" of the entire robot
-  const Eigen::Affine3d trans_to_root = robot_state_->getGlobalLinkTransform(robot_model_->getRootLinkName()); ////not used ever
-  ////tranform from global frame to first link of arm
-  const Eigen::Affine3d trans_to_arm = robot_state_->getGlobalLinkTransform(arm_link_names[0]);
-  ////inverse - ??? we assume that root and global frames correspond???????????????????????????????
-  const Eigen::Affine3d arm_to_root = trans_to_arm.inverse(); ////maybe here we should use trans_to_root
+  ////transform from global frame to "root link" of the entire robot (for tiago - base_footprint)
+  const Eigen::Affine3d trans_to_root = robot_state_->getGlobalLinkTransform(robot_model_->getRootLinkName()); ////not used ever  //world T root
+  ////tranform from global frame to first link of arm (for tiago - arm_1_link)
+  const Eigen::Affine3d trans_to_arm = robot_state_->getGlobalLinkTransform(arm_link_names[0]); // world T arm
+  ////inverse - !!!! we need that root and global frames correspond
+  const Eigen::Affine3d arm_to_root = trans_to_arm.inverse()*trans_to_root; // arm T root = arm T world * world T root
+  ////maybe here we should use trans_to_root if we don't want this correspondence 
 
   sphere_discretization::SphereDiscretization sd;
   ////for all the possible armbaseposes computed  (globally??)
@@ -380,7 +405,7 @@ void PlaceBase::transformToRobotbase(std::multimap< std::vector< double >, std::
     tf::poseMsgToEigen(arm_base_pose, arm_base_tf);
     geometry_msgs::Pose robot_base_pose;
     ////compute position of the robot base given the position of the first link of the arm
-    tf::poseEigenToMsg(arm_to_root*arm_base_tf , robot_base_pose);//// le avrei messe al contrario = arm_base_tf*arm_to_root
+    tf::poseEigenToMsg(arm_to_root*arm_base_tf , robot_base_pose);
     ////convert to have the correct data format of the global tranform to computed robot base
     static const int arr[] = {1,1,1};
     std::vector<double> base_vec (arr, arr + sizeof(arr) / sizeof(arr[0]) );
@@ -404,6 +429,7 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
   Q_EMIT basePlacementProcessStarted();
   score_ = 0;
   ros::NodeHandle n;
+  //// publisher to send the results to the navigation
   ros::Publisher bp_pub = n.advertise<geometry_msgs::Pose>("reuleaux_bp_to_nav/bp_poses", 1000);
   if (grasp_poses.size() == 0)
     ROS_ERROR_STREAM("Please provide atleast one grasp pose.");
@@ -494,9 +520,6 @@ bool PlaceBase::findbase(std::vector< geometry_msgs::Pose > grasp_poses)
 
   geometry_msgs::Pose stop;
   bp_pub.publish(stop);
-  
-
-  // CONTROLLA CHE CI SIA IL SERVIZIO BP TO NAV, SE C'È MANDA IL BP, SE NON C'È AMEN
 
   //double s = calculateScoreForRobotBase(GRASP_POSES_, final_base_poses);
   Q_EMIT basePlacementProcessCompleted(score_);
@@ -597,21 +620,17 @@ void PlaceBase::findBaseByVerticalRobotModel()
     prob_base_pose.orientation.y = 0;
     prob_base_pose.orientation.z = 0;
     prob_base_pose.orientation.w = 1;
-    ////FILTERING POSES TO AVOID COLLISION WITH OBJECTS IN THE SCENE
-    ros::NodeHandle nn;
-    FilterCollisionPoses filter;
-    if(filter.check_collision_objects(nn, prob_base_pose.position.x, prob_base_pose.position.y, prob_base_pose.position.z, false)){ 
-      //true = NOT IN COLLISION with any collision object of the planning scene -- acceptable base pos
-      base_poses.push_back(prob_base_pose);
-    } 
+    base_poses.push_back(prob_base_pose);
+     
   }
 
   for(int i=0;i<BASE_LOC_SIZE_;++i)
   { ////stores only the ones with highest score, as many as requested by user
     base_poses_user.push_back(base_poses[i]);
   }
-
+ROS_DEBUG("-- finito di fare le base poses in vertical rob mod - chiamiamo calculate score");
   double s = calculateScoreForRobotBase(GRASP_POSES_, base_poses_user);
+  ROS_DEBUG("- vertRobMod finito score: %f ",s);
   score_ = s;
   final_base_poses = base_poses_user;
 }
@@ -632,24 +651,19 @@ void PlaceBase::findBaseByPCA()
     wss.point.y = highScoreSp[i][1];
     wss.point.z = highScoreSp[i][2];
     
-    ////FILTERING POSES TO AVOID COLLISION WITH OBJECTS IN THE SCENE
-    ros::NodeHandle nn;
-    FilterCollisionPoses filter;
-    if(filter.check_collision_objects(nn, wss.point.x, wss.point.y, wss.point.z,true)){ 
-      //true = NOT IN COLLISION with any collision object of the planning scene -- acceptable base pos
-      std::vector< double > basePose;
-      basePose.push_back(highScoreSp[i][0]);
-      basePose.push_back(highScoreSp[i][1]);
-      basePose.push_back(highScoreSp[i][2]);
-      std::multimap< std::vector< double >, std::vector< double > >::iterator it;
-      for (it = baseTrnsCol.lower_bound(basePose); it != baseTrnsCol.upper_bound(basePose); ++it)
-      {
-        geometry_msgs::Pose pp;
-        sd.convertVectorToPose(it->second, pp);
-        wss.poses.push_back(pp);
-      }
-      ws.WsSpheres.push_back(wss);
+    std::vector< double > basePose;
+    basePose.push_back(highScoreSp[i][0]);
+    basePose.push_back(highScoreSp[i][1]);
+    basePose.push_back(highScoreSp[i][2]);
+    std::multimap< std::vector< double >, std::vector< double > >::iterator it;
+    for (it = baseTrnsCol.lower_bound(basePose); it != baseTrnsCol.upper_bound(basePose); ++it)
+    {
+      geometry_msgs::Pose pp;
+      sd.convertVectorToPose(it->second, pp);
+      wss.poses.push_back(pp);
     }
+    ws.WsSpheres.push_back(wss);
+  
   }
 
   for (int i = 0; i < ws.WsSpheres.size(); ++i)
@@ -702,14 +716,8 @@ void PlaceBase::findBaseByGraspReachabilityScore()
     {
       geometry_msgs::Pose pp;
       sd.convertVectorToPose(it->second, pp);
-      ////FILTERING POSES TO AVOID COLLISION WITH OBJECTS IN THE SCENE
-      ros::NodeHandle nn;
-      FilterCollisionPoses filter;
-      if(filter.check_collision_objects(nn, pp.position.x, pp.position.y, pp.position.z, true)){ 
-        //true = NOT IN COLLISION with any collision object of the planning scene -- acceptable base pos
-        probBasePoses.push_back(pp);
-      } 
-      
+      probBasePoses.push_back(pp);
+             
     }
     //std::multiset< std::pair< int, geometry_msgs::Pose > > basePoseWithHits;
     std::map<int, geometry_msgs::Pose> basePoseWithHits;
@@ -762,13 +770,8 @@ void PlaceBase::findBaseByIKSolutionScore()
     {
       geometry_msgs::Pose pp;
       sd.convertVectorToPose(it->second, pp);
-      ////FILTERING POSES TO AVOID COLLISION WITH OBJECTS IN THE SCENE
-      ros::NodeHandle nn;
-      FilterCollisionPoses filter;
-      if(filter.check_collision_objects(nn, pp.position.x, pp.position.y, pp.position.z, true)){ 
-        //true = NOT IN COLLISION with any collision object of the planning scene -- acceptable base pos
-        probBasePoses.push_back(pp);
-      } 
+      probBasePoses.push_back(pp);
+       
     }
     //std::multiset< std::pair< int, geometry_msgs::Pose > > basePoseWithHits;
     std::map<double, geometry_msgs::Pose> basePoseWithHits;
@@ -958,7 +961,7 @@ void PlaceBase::ShowUnionMap(bool show_map)
   /* Slot for showing Union map. Can only be visualized after calling the find base function. Otherwise it will show
    * error message
   */
-  ROS_INFO("Showing Map:");
+  ROS_INFO("Showing Union Map:");
   if (sphereColor.size() == 0)
     ROS_INFO("The union map has not been created yet. Please create the Union map by the Find Base button");
   else
@@ -969,7 +972,7 @@ void PlaceBase::ShowUnionMap(bool show_map)
     ws.header.stamp = ros::Time::now();
     ws.header.frame_id = "map";
     ws.resolution = res;
-
+    ROS_DEBUG(" loading spheres");
     for (std::multimap< std::vector< double >, double >::iterator it = sphereColor.begin(); it != sphereColor.end(); ++it)
     {
       map_creator::WsSphere wss;
@@ -979,6 +982,7 @@ void PlaceBase::ShowUnionMap(bool show_map)
       wss.ri = it->second;
       ws.WsSpheres.push_back(wss);
     }
+    ROS_DEBUG(" publishing spheres");
     workspace_pub.publish(ws);
   }
 }
@@ -987,5 +991,5 @@ void PlaceBase::clearUnionMap(bool clear_map)
 {
   /* The function need to be implemented. The slot is already created in widget
   */
-  ROS_INFO("Clearing Map:");
+  ROS_INFO("Clearing Union Map:");
 }

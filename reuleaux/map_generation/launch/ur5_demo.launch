@@ -16,6 +16,7 @@
       <param name="resolution" value="0.5" />
       <param name="radius" value="1" />
       <param name="check_collision" value="true"/>
+      <param name="do_centering" value="false"/>
       <param name="path" value="$(find map_generation)/maps/" />
       <param name="filename" value="default" />
 

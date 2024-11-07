@@ -5,6 +5,7 @@
 #include<map_generation/utility.h>
 #include<map_generation/discretization.h>
 #include<map_generation/reachability.h>
+#include<map_generation/centering.h>
 #include<map_generation/hdf5_dataset.h>
 #include<map_generation/WorkSpace.h>
 
@@ -20,7 +21,7 @@ class mapGeneration
 {
 public:
   mapGeneration(ros::NodeHandle &node, const std::string& group_name, const std::string& path,
-                const std::string& filename, const std::string& pkg_name, const double& resolution, const double& radius, bool check_collision);
+                const std::string& filename, const std::string& pkg_name, const double& resolution, const double& radius, bool check_collision, bool do_centering);
 
   void generate();
 
@@ -28,6 +29,7 @@ public:
 private:
    void discretizeWorkspace(geometry_msgs::Pose& pose);
    void filterWorkspace();
+   void centerWorkspace();
    void saveWorkspace();
    void getArmPose(geometry_msgs::Pose& pose);
 
@@ -40,11 +42,13 @@ private:
    double resolution_;
    double radius_;
    bool check_collision_;
+   bool do_centering_;
 
    boost::scoped_ptr<moveit::planning_interface::MoveGroupInterface> group_;
    geometry_msgs::Pose arm_pose_;
    map_generation::WorkSpace init_ws_;
    map_generation::WorkSpace filtered_ws_;
+   map_generation::WorkSpace centered_ws_;
 
    int init_sp_size_, final_sp_size_;
    int init_pose_size_, final_pose_size_;

@@ -18,6 +18,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_srvs
   actionlib
   move_base_msgs
+  tf2
+  control_msgs
 )
 
 
@@ -60,11 +62,11 @@ include_directories(
 )
 
 # Add your executable
-add_executable(load_kitchen_planning_scene src/load_kitchen_planning_scene.cpp)
+#add_executable(load_kitchen_planning_scene src/load_kitchen_planning_scene.cpp)
 # Link against the required libraries
-target_link_libraries(load_kitchen_planning_scene  ${catkin_LIBRARIES})
+#target_link_libraries(load_kitchen_planning_scene  ${catkin_LIBRARIES})
 # Install targets
-install(TARGETS load_kitchen_planning_scene  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+#install(TARGETS load_kitchen_planning_scene  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 # Add your executable
 add_executable(reuleaux_bp_to_nav src/reuleaux_bp_to_nav.cpp)

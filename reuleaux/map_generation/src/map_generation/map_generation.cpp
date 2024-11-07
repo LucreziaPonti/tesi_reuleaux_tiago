@@ -6,7 +6,7 @@
 namespace reuleaux
 {
 mapGeneration::mapGeneration(ros::NodeHandle& node, const std::string &group_name, const std::string &path,
-                             const std::string &filename, const std::string& pkg_name, const double &resolution, const double &radius, bool check_collision)
+                             const std::string &filename, const std::string& pkg_name, const double &resolution, const double &radius, bool check_collision, bool do_centering)
 {
   nh_ = node;
   group_name_ = group_name;
@@ -16,9 +16,11 @@ mapGeneration::mapGeneration(ros::NodeHandle& node, const std::string &group_nam
   resolution_ = resolution;
   radius_ = radius;
   check_collision_= check_collision;
+  do_centering_= do_centering;
   group_.reset(new moveit::planning_interface::MoveGroupInterface(group_name_));
   init_ws_.WsSpheres.clear();
   filtered_ws_.WsSpheres.clear();
+  centered_ws_.WsSpheres.clear();
 }
 
 void mapGeneration::discretizeWorkspace(geometry_msgs::Pose& pose)
@@ -43,6 +45,16 @@ void mapGeneration::filterWorkspace()
   delete reach;
 }
 
+void mapGeneration::centerWorkspace(){
+  reuleaux::Centering* centr(new reuleaux::Centering(nh_,arm_pose_));
+  centr->setInitialWorkspace(filtered_ws_);
+  centr->createCenteredWorkspace();
+  centr->getFinalWorkspace(centered_ws_);
+  static int sp_size, pose_size;
+  reuleaux::getPoseAndSphereSize(centered_ws_, final_sp_size_, final_pose_size_);
+  delete centr;
+}
+
 void mapGeneration::saveWorkspace()
 {
   std::string name;
@@ -56,7 +68,11 @@ void mapGeneration::saveWorkspace()
   name = path_+filename;
 
   reuleaux::Hdf5Dataset* h5(new reuleaux::Hdf5Dataset(name));
-  h5->save(filtered_ws_);
+  if (do_centering_){
+    h5->save(centered_ws_);
+  }else{
+    h5->save(filtered_ws_);
+  }
   ROS_INFO("%s saved to %s", filename.c_str(), path_.c_str());
 }
 
@@ -74,16 +90,21 @@ void mapGeneration::generate()
 {
   ros::Time startit = ros::Time::now();
   getArmPose(arm_pose_);
+  ROS_INFO("Center of workspace   x:%f, y:%f, z:%f", arm_pose_.position.x, arm_pose_.position.y, arm_pose_.position.z);
   discretizeWorkspace(arm_pose_);
   double dif2 = ros::Duration( ros::Time::now() - startit).toSec();
+  ROS_INFO("Time for discretizing workspace %.2lf seconds.", dif2);
+  ROS_INFO("Initial workspace has %d spheres and %d poses", init_sp_size_, init_pose_size_);
   filterWorkspace();
   double dif3 = ros::Duration( ros::Time::now() - startit).toSec();
-
-  saveWorkspace();
-  ROS_INFO("Time for discretizing workspace %.2lf seconds.", dif2);
-  ROS_INFO("Center of workspace   x:%f, y:%f, z:%f", arm_pose_.position.x, arm_pose_.position.y, arm_pose_.position.z);
   ROS_INFO("Time for creating reachable workspace is %.2lf seconds.", dif3);
-  ROS_INFO("Initial workspace has %d spheres and %d poses", init_sp_size_, init_pose_size_);
+  if(do_centering_){
+    centerWorkspace(); //added by me
+  }
+  saveWorkspace();
+  ROS_INFO("Center of workspace   x:%f, y:%f, z:%f", arm_pose_.position.x, arm_pose_.position.y, arm_pose_.position.z);
+  ROS_INFO("Time for discretizing workspace %.2lf seconds.", dif2);
+  ROS_INFO("Time for creating reachable workspace is %.2lf seconds.", dif3);
   ROS_INFO("Final workspace has %d spheres and %d poses", final_sp_size_, final_pose_size_);
   ROS_INFO("Completed");
 }

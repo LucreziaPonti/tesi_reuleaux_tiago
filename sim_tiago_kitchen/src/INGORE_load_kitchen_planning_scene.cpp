@@ -1,4 +1,4 @@
-
+//diventato obsoleto - gli oggetti non vanno bene
 // ROS
 #include <ros/ros.h>
 
@@ -29,10 +29,11 @@ int main(int argc, char** argv)
   ros::NodeHandle nh;
   ros::AsyncSpinner spinner(1);
   spinner.start();
+  ros::Duration(10).sleep();
   tf2_ros::Buffer tfBuffer;
   tf2_ros::TransformListener tfListener(tfBuffer);
   try{
-    tfBuffer.lookupTransform("odom", "map", ros::Time::now(), ros::Duration(3.0));
+    tfBuffer.lookupTransform("odom", "map", ros::Time::now(), ros::Duration(5.0));
   } catch (tf2::TransformException &ex) {
     ROS_WARN("Could NOT transform odom to map: %s", ex.what());
   }

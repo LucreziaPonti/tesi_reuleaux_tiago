@@ -35,6 +35,7 @@ catkin_package(
       dataset
       utility
       reachability
+      centering
       map_generation
       roscpp
   CATKIN_DEPENDS roscpp message_runtime
@@ -47,6 +48,7 @@ add_library(discretization   src/${PROJECT_NAME}/discretization.cpp )
 add_library(dataset src/${PROJECT_NAME}/hdf5_dataset.cpp)
 add_library(utility src/${PROJECT_NAME}/utility.cpp)
 add_library(reachability  src/${PROJECT_NAME}/reachability.cpp)
+add_library(centering  src/${PROJECT_NAME}/centering.cpp)
 add_library(map_generation  src/${PROJECT_NAME}/map_generation.cpp)
 
 add_dependencies(discretization map_generation_generate_messages_cpp)
@@ -55,10 +57,11 @@ add_dependencies(utility map_generation_generate_messages_cpp)
 target_link_libraries(discretization  ${catkin_LIBRARIES} ${OCTOMAP_LIBRARIES})
 target_link_libraries(utility  ${catkin_LIBRARIES})
 target_link_libraries(reachability  ${catkin_LIBRARIES} utility)
+target_link_libraries(centering  ${catkin_LIBRARIES} utility)
 target_link_libraries(dataset  ${catkin_LIBRARIES} utility ${HDF5_LIBRARIES} )
-target_link_libraries(map_generation  ${catkin_LIBRARIES} discretization dataset utility reachability )
+target_link_libraries(map_generation  ${catkin_LIBRARIES} discretization dataset utility reachability centering)
 
-install(TARGETS discretization dataset utility reachability map_generation
+install(TARGETS discretization dataset utility reachability centering map_generation
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 )
@@ -68,7 +71,5 @@ install(DIRECTORY include/${PROJECT_NAME}/
 )
 
 add_executable(map_generation_node src/nodes/map_generation_node.cpp)
-
 add_dependencies(map_generation_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
 target_link_libraries(map_generation_node map_generation ${catkin_LIBRARIES})

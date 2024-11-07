@@ -160,6 +160,23 @@
     <xacro:torso_simple_transmission name="torso_lift" reduction="1.0" />
   </xacro:unless>
 
+  <joint name="${name}_footprint_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.062 0 -0.888" />
+    <parent link="${name}_lift_link" />
+    <child link="${name}_footprint" />
+    <axis xyz="0 0 0" />
+  </joint>
+
+  <link name="${name}_footprint">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0" />
+      <mass value="0.01" />
+      <inertia ixx="0.000001" ixy="0" ixz="0"
+               iyy="0.000001" iyz="0"
+               izz="0.000001" />
+    </inertial>
+  </link>
+
  </xacro:macro>
 
 </robot>

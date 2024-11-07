@@ -82,6 +82,10 @@ add_executable(create_inverse_reachability_map src/create_inverse_reachability_m
 add_dependencies(create_inverse_reachability_map ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(create_inverse_reachability_map sphere_discretization kinematics  hdf5_dataset ${catkin_LIBRARIES})
 
+add_executable(fix_RM_reference_frame src/IGNORE_fix_RM_reference_frame.cpp)
+add_dependencies(fix_RM_reference_frame ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(fix_RM_reference_frame sphere_discretization kinematics  hdf5_dataset ${catkin_LIBRARIES})
+
 add_executable(create_capability_map src/create_capability_map.cpp)
 add_dependencies(create_capability_map ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(create_capability_map sphere_discretization kinematics hdf5_dataset ${catkin_LIBRARIES})

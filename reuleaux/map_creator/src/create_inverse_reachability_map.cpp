@@ -45,7 +45,7 @@ ros::init(argc, argv, "inverse_workspace");
   if (argc < 2)
   {
     ROS_ERROR_STREAM("Please provide the name of the reachability map. If you have not created it yet, Please create "
-                     "the map by running the create reachability map node in map_creator package");
+                     "the map by running the create reachability map node in map_creator or map_generation package");
     return 0;
   }
 

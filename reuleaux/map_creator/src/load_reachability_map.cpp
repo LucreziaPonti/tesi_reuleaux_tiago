@@ -36,11 +36,20 @@ int main(int argc, char **argv)
     map_creator::WorkSpace ws;
     ws.header.stamp = ros::Time::now();
     if (argc < 3){
-    	ROS_INFO_STREAM("NO ADDITIONAL ARG - THE MAP IS ASSUMED TO BE FROM MAP_GENERATOR - FRAME ID SET TO base_footprint");
-    	ws.header.frame_id = "base_footprint";
+    	ROS_INFO_STREAM("NO ADDITIONAL ARG - THE MAP IS ASSUMED TO BE AN INVERSE RM - REFERENCE FRAME ID SET TO arm_tool_link");
+    	ws.header.frame_id = "arm_tool_link";
     }else{
-    	ROS_INFO_STREAM("ADDITIONAL ARG USED - THE MAP IS ASSUMED TO BE FROM MAP_CREATOR - FRAME ID SET TO torso_lift_link");
-    	ws.header.frame_id = "torso_lift_link";
+      if (argv[2][0]=='c'||argv[2][0]=='C'){
+    	  ROS_INFO_STREAM("ADDITIONAL ARG USED = C/c- THE MAP IS ASSUMED TO BE A RM FROM MAP_CREATOR - REFERENCE FRAME ID SET TO torso_lift_link");
+    	  ws.header.frame_id = "torso_lift_link";
+      }else if (argv[2][0]=='g'||argv[2][0]=='G'){
+    	  ROS_INFO_STREAM("ADDITIONAL ARG USED = G/g- THE MAP IS ASSUMED TO BE A RM FROM MAP_GENERATION - REFERENCE FRAME ID SET TO arm_1_link");
+    	  ws.header.frame_id = "arm_1_link";
+      }else{
+    	  ROS_INFO_STREAM("ADDITIONAL ARG USED is not acceptable option (c=MAP_CREATOR / g=MAP_GENERATION) - REFERENCE FRAME ID SET TO base_link");
+    	  ws.header.frame_id = "base_link";
+      }
+
     }
     ws.resolution = res;
 

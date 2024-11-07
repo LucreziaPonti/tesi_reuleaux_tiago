@@ -15,6 +15,7 @@ to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
         <geometry>
           <mesh>
             <uri>meshes/model.obj</uri>
+            <scale> 0.5 0.5 1 </scale>
           </mesh>
         </geometry>
       </visual>
@@ -23,6 +24,7 @@ to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
         <geometry>
           <mesh>
             <uri>meshes/model.obj</uri>
+            <scale> 0.5 0.5 1 </scale>
           </mesh>
         </geometry>
       </collision>
