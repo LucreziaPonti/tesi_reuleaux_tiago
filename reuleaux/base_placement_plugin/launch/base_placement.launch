@@ -18,6 +18,6 @@
 <!--Running RVIZ for base_placement-->
 <node pkg="rviz" type="rviz" output="screen" name="$(anon rviz)" args="-d $(find base_placement_plugin)/rviz/base_placement.rviz" />
 
-<node pkg="sim_tiago_kitchen" type="load_kitchen_planning_scene" output="screen" name="load_kitchen_planning_scene" />
+<!--node pkg="sim_tiago_kitchen" type="load_kitchen_planning_scene" output="screen" name="load_kitchen_planning_scene" /-->
 
 </launch>

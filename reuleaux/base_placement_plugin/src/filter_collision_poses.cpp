@@ -39,45 +39,46 @@ bool FilterCollisionPoses::check_collision_objects( ros::NodeHandle& node, const
         return true;
     }
     for(int i=0; i<objects.size();i++){
-        //ROS_INFO("object %d - name %s", i, objects[i].id.c_str());
-        //ROS_INFO("pos = %f , %f , %f ", objects[i].pose.position.x,objects[i].pose.position.y,objects[i].pose.position.z);
-        //store the position values (shorter names for variables=less messy code)
-        co_x=objects[i].pose.position.x;
-        co_y=objects[i].pose.position.y;
-        co_z=objects[i].pose.position.z;
-        //ROS_INFO("primitive type: %d (box=1,cylinder=3)", objects[i].primitives[0].type);
+        ROS_DEBUG("object %d - name %s", i, objects[i].id.c_str());
+        if(objects[i].id!="sink_furniture"){ // lo escludo perchè ci sono dei problemi di posizionamento che lo mettono dove non è irl
+            //ROS_DEBUG("pos = %f , %f , %f ", objects[i].pose.position.x,objects[i].pose.position.y,objects[i].pose.position.z);
+            //store the position values (shorter names for variables=less messy code)
+            co_x=objects[i].pose.position.x;
+            co_y=objects[i].pose.position.y;
+            co_z=objects[i].pose.position.z;
+            //ROS_DEBUG("primitive type: %d (box=1,cylinder=3)", objects[i].primitives[0].type);
 
-        //store the values of dimensions depending on the primitive type - here we only used box and cylinder
-        if(objects[i].primitives[0].type==1){ //BOX
-            //ROS_INFO("dimensions: %f , %f , %f", objects[i].primitives[0].dimensions[0],objects[i].primitives[0].dimensions[1],objects[i].primitives[0].dimensions[2]); 
-            dX=objects[i].primitives[0].dimensions[0]/2+0.18;
-            dY=objects[i].primitives[0].dimensions[1]/2+0.18;
-            dZ=objects[i].primitives[0].dimensions[2]/2+0.15;
-            // the +0.15 is mainly for the tables 
+            //store the values of dimensions depending on the primitive type - here we only used box and cylinder
+            if(objects[i].primitives[0].type==1){ //BOX
+                //ROS_DEBUG("dimensions: %f , %f , %f", objects[i].primitives[0].dimensions[0],objects[i].primitives[0].dimensions[1],objects[i].primitives[0].dimensions[2]); 
+                dX=objects[i].primitives[0].dimensions[0]/2+0.18;
+                dY=objects[i].primitives[0].dimensions[1]/2+0.2;
+                dZ=objects[i].primitives[0].dimensions[2]/2+0.15;
+                // the +0.15 is mainly for the tables 
 
-        }else if (objects[i].primitives[0].type==3){ //CYLINDER
-            //ROS_INFO("dimensions: %f , %f ", objects[i].primitives[0].dimensions[0],objects[i].primitives[0].dimensions[1]); 
-            dX=objects[i].primitives[0].dimensions[1];
-            dY=objects[i].primitives[0].dimensions[1];
-            dZ=objects[i].primitives[0].dimensions[0]/2;
-        }
+            }else if (objects[i].primitives[0].type==3){ //CYLINDER
+                //ROS_DEBUG("dimensions: %f , %f ", objects[i].primitives[0].dimensions[0],objects[i].primitives[0].dimensions[1]); 
+                dX=objects[i].primitives[0].dimensions[1];
+                dY=objects[i].primitives[0].dimensions[1];
+                dZ=objects[i].primitives[0].dimensions[0]/2;
+            }
 
-        
-        if(!checkZ){ //for poses already on the ground (VerticalRobotModel) - bc some coll_obj dont fully touch the ground but the real obj does
-            if((x>(co_x-dX))&&(x<(co_x+dX))&&(y>(co_y-dY))&&(y<(co_y+dY))){//inside the bounds of the object -- not acceptable pose
+
+            //PERFORM THE FILTERING
+            if(checkZ){
+                if((x>(co_x-(dX+0.06)))&&(x<(co_x+(dX+0.06)))&&(y>(co_y-(dY+0.06)))&&(y<(co_y+(dY+0.06)))){//inside the bounds of the object -- not acceptable pose
+                    ROS_DEBUG("NOT acceptable pose - %s ",objects[i].id.c_str());
+                    return false;
+                }
+                if((z>1.232||z<0.89)){ //outside robot's fisical boundaries (torso_lift_link's height)
+                    ROS_DEBUG("NOT acceptable pose - robot physical boundaries");
+                    return false;            
+                }
+            }else if((x>(co_x-dX))&&(x<(co_x+dX))&&(y>(co_y-dY))&&(y<(co_y+dY))){//inside the bounds of the object -- not acceptable pose
                 ROS_DEBUG("NOT acceptable pose - %s ",objects[i].id.c_str());
                 return false;
             }
-        }else{ // for poses of the base of the manipulator (can be elevated) 
-            if(z>1.087||z<0.737){ //outside robot's fisical boundaries (arm_1_link's height)
-                ROS_DEBUG("NOT acceptable pose - robot physical boundaries");
-                return false;            
-            }else if((x>(co_x-dX))&&(x<(co_x+dX))&&(y>(co_y-dY))&&(y<(co_y+dY))&&(z>(co_z-dZ))&&(z<(co_z+dZ))){
-                ROS_DEBUG("NOT acceptable pose - %s ",objects[i].id.c_str());
-                return false;
-            }
         }
-        
         // if not in collision goes on to check next object
     }
     //not in collision with any object -- acceptable pose

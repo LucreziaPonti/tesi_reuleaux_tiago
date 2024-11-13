@@ -63,7 +63,7 @@ int main(int argc, char** argv)
   }
 
   geometry_msgs::PoseStamped goal_pose;
-  goal_pose.header.frame_id = "base_footprint";
+  goal_pose.header.frame_id = "odom";
   goal_pose.pose.position.x = atof(argv[1]);
   goal_pose.pose.position.y = atof(argv[2]);
   goal_pose.pose.position.z = atof(argv[3]);
@@ -78,7 +78,7 @@ int main(int argc, char** argv)
   moveit::planning_interface::MoveGroupInterface group_arm("arm");
   //choose your preferred planner
   group_arm.setPlannerId("SBLkConfigDefault");
-  group_arm.setPoseReferenceFrame("base_footprint");
+  group_arm.setPoseReferenceFrame("odom");
   group_arm.setPoseTarget(goal_pose);
 
   ROS_INFO_STREAM("Planning to move " <<

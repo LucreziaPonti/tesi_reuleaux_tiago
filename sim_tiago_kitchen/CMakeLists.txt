@@ -9,6 +9,8 @@ project(sim_tiago_kitchen)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   urdf
+  dynamic_reconfigure
+  actionlib_msgs
   geometry_msgs
   moveit_msgs
   roscpp
@@ -20,6 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
   move_base_msgs
   tf2
   control_msgs
+  play_motion_msgs
 )
 
 
@@ -34,11 +37,11 @@ find_package(catkin REQUIRED COMPONENTS
  #)
 
 ## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
+ add_service_files(
+   FILES
+   PickPlaceCall.srv
 #   Service2.srv
-# )
+ )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -50,7 +53,7 @@ find_package(catkin REQUIRED COMPONENTS
 # Generate added messages and services with any dependencies listed here
  generate_messages(
    DEPENDENCIES
-   std_msgs  geometry_msgs # Or other packages containing msgs
+   std_msgs geometry_msgs actionlib_msgs play_motion_msgs # Or other packages containing msgs
  )
 
 
@@ -74,6 +77,13 @@ add_executable(reuleaux_bp_to_nav src/reuleaux_bp_to_nav.cpp)
 target_link_libraries(reuleaux_bp_to_nav  ${catkin_LIBRARIES})
 # Install targets
 install(TARGETS reuleaux_bp_to_nav  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
+# Add your executable
+add_executable(tiago_pick_and_place src/tiago_pick_and_place.cpp)
+# Link against the required libraries
+target_link_libraries(tiago_pick_and_place  ${catkin_LIBRARIES})
+# Install targets
+install(TARGETS tiago_pick_and_place  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
 install(DIRECTORY launch 
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

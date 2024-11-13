@@ -22,6 +22,8 @@
   <build_export_depend>urdf</build_export_depend>
   <exec_depend>urdf</exec_depend>
   <build_depend>message_generation</build_depend>
+    <build_depend>actionlib</build_depend>
+  <build_depend>actionlib_msgs</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>moveit_msgs</build_depend>
   <build_depend>roscpp</build_depend>
@@ -32,6 +34,8 @@
   <build_depend>tf2_ros</build_depend>
   <build_depend>tf2_geometry_msgs</build_depend>
   <build_depend>control_msgs</build_depend>
+    <exec_depend>actionlib</exec_depend>
+  <exec_depend>actionlib_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>moveit_msgs</exec_depend>
   <exec_depend>roscpp</exec_depend>
@@ -42,6 +46,7 @@
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>tf2_geometry_msgs</exec_depend>
   <exec_depend>control_msgs</exec_depend>
+  <depend>play_motion_msgs</depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

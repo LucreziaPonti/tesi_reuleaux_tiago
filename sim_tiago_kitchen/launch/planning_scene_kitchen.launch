@@ -14,6 +14,8 @@
     <node if="$(arg objects)" name="recognize_pringles" pkg="gazebo_test_tools" type="fake_object_recognizer_cmd"  respawn="false" output="screen" args="pringles 0"/>
     <node if="$(arg objects)" name="recognize_mug" pkg="gazebo_test_tools" type="fake_object_recognizer_cmd"  respawn="false" output="screen" args="blue_mug 0"/>
     <node if="$(arg objects)" name="recognize_sprite" pkg="gazebo_test_tools" type="fake_object_recognizer_cmd"  respawn="false" output="screen" args="sprite 0"/>
-    <node if="$(arg objects)" name="recognize_cereal" pkg="gazebo_test_tools" type="fake_object_recognizer_cmd"  respawn="false" output="screen" args="cereal_mr_t 0"/>
+    <node if="$(arg objects)" name="recognize_pringles2" pkg="gazebo_test_tools" type="fake_object_recognizer_cmd"  respawn="false" output="screen" args="pringles2 0"/>
+    <node if="$(arg objects)" name="recognize_chairs" pkg="gazebo_test_tools" type="fake_object_recognizer_cmd"  respawn="false" output="screen" args="kitchen_no_sink 0"/>
+    <node if="$(arg objects)" name="recognize_box" pkg="gazebo_test_tools" type="fake_object_recognizer_cmd"  respawn="false" output="screen" args="box 0"/>
 
 </launch>

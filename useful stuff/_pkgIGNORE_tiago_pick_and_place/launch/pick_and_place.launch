@@ -9,12 +9,12 @@
   <!-- Load definition of pregrasp motion into play_motion namespace -->
   <rosparam command="load" file="$(find tiago_pick_and_place)/config/pick_motions.yaml" /> 
 
-  <!-- Pick & place server -->
+  <!-- Pick & place server >
   <node name="pick_place_server" pkg="tiago_pick_and_place" type="pick_place_server" output="screen">
       <rosparam command="load" file="$(find tiago_pick_and_place)/config/pick_and_place_params.yaml" />
-  </node>
+  </node-->
 
-  <!-- Node exposing service to start looking for the object and trigger the picking -->
+  <!-- Node exposing service to start looking for the object and trigger the picking >
   <node name="pick_place_handler" pkg="tiago_pick_and_place" type="pick_place_handler" output="screen">  
     <rosparam command="load" ns="pick_task"  file="$(find base_placement_plugin)/saved_tasks/$(arg pick_yaml).yaml" />
     <rosparam command="load" ns="place_task"  file="$(find base_placement_plugin)/saved_tasks/$(arg place_yaml).yaml" />
@@ -23,7 +23,7 @@
 
   <group if="$(arg rviz)">
       <node name="pick_place_rviz" pkg="rviz" type="rviz" args="-d $(find tiago_pick_demo)/config/rviz/tiago_pick_demo.rviz" />
-  </group>
+  </group-->
 
 </launch>
 

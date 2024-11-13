@@ -1,0 +1,6 @@
+string task_name
+bool do_pregrasp
+---
+#result definition
+# Comes from moveit_msgs/MoveItErrorCodes
+int32 error_code

@@ -5,4 +5,6 @@
 
 <include file="$(find sim_tiago_kitchen)/launch/tiago_navigation.launch"/>
 
+<include file="$(find sim_tiago_kitchen)/launch/pick_and_place.launch"/>
+
 </launch>

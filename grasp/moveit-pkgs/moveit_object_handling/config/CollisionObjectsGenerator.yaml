@@ -10,7 +10,8 @@ skip_objects: "ground_plane"
 # be set to allow collisions with the new object and
 # all of the links listed below.
 # Specify as comma or space separated list.
-allowed_collision_links: "table_top"    
+allowed_collision_links: "torso_lift_link"    
+## so that if i want i can position the obects on tiago's back
 
 # Instead of publishing on the MoveIt! collision object topic,
 # publish a planning scene diff with the new/updated MoveIt!

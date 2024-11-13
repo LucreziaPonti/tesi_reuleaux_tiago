@@ -389,9 +389,17 @@ void PlaceBase::transformToRobotbase(std::multimap< std::vector< double >, std::
   const Eigen::Affine3d trans_to_root = robot_state_->getGlobalLinkTransform(robot_model_->getRootLinkName()); ////not used ever  //world T root
   ////tranform from global frame to first link of arm (for tiago - arm_1_link)
   const Eigen::Affine3d trans_to_arm = robot_state_->getGlobalLinkTransform(arm_link_names[0]); // world T arm
+
+  const Eigen::Vector3d v_arm = trans_to_arm.translation();
+  ROS_DEBUG("global transform arm_1_link: %f %f %f",v_arm[0],v_arm[1],v_arm[2]);
+  const Eigen::Vector3d v_root = trans_to_root.translation();
+  ROS_DEBUG("global transform root (b_f): %f %f %f",v_root[0],v_root[1],v_root[2]);
+
   ////inverse - !!!! we need that root and global frames correspond
   const Eigen::Affine3d arm_to_root = trans_to_arm.inverse()*trans_to_root; // arm T root = arm T world * world T root
   ////maybe here we should use trans_to_root if we don't want this correspondence 
+  const Eigen::Vector3d v_arm_inv = arm_to_root.translation();
+  ROS_DEBUG("inverse transform arm_1_link: %f %f %f",v_arm_inv[0],v_arm_inv[1],v_arm_inv[2]);
 
   sphere_discretization::SphereDiscretization sd;
   ////for all the possible armbaseposes computed  (globally??)
@@ -605,10 +613,10 @@ void PlaceBase::findBaseByVerticalRobotModel()
   ROS_INFO("Finding optimal ROBOT base pose by Vertical robot model.");
   std::vector<geometry_msgs::Pose> base_poses;
   std::vector<geometry_msgs::Pose> base_poses_user;
-  int num_of_desired_sp = HIGH_SCORE_SP_+50;
+  int num_of_desired_sp = HIGH_SCORE_SP_;
   int num_of_sp = highScoreSp.size();
   if(BASE_LOC_SIZE_>num_of_sp)
-    ROS_ERROR("Desired base locations are too high. Please reduce it");
+    ROS_ERROR("Desired base locations are too high (num_of_sp=%d , num_base_loc=%d). Please reduce it",num_of_sp,BASE_LOC_SIZE_);
   //The iteration is taken 4 just to make sure that the robot models are not so close to each other
   for(int i=0;i<num_of_desired_sp;i+=2)
   {
