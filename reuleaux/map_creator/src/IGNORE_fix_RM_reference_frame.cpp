@@ -64,7 +64,7 @@ ros::init(argc, argv, "fix_RM_reference_frame");
       h5_res.open();
       h5_res.h5ToResolution(res);
       h5_res.close();
-      file =  str(boost::format("%s_%d_reachability_new_frame.h5") % k.getRobotName() % res);
+      file =  str(boost::format("%s_%d_reachability_NEW_frame.h5") % k.getRobotName() % res);
       filename = path + file;
     }
   }
@@ -91,7 +91,8 @@ ros::init(argc, argv, "fix_RM_reference_frame");
 
   ROS_INFO("creo la trasforamta da usare per cambiare le posizioni");
   //serve la trasformata (arm_1_link)T(base_footprint)
-  tf2::Vector3 vec(-0.09305, -0.014, -0.7375);
+  tf2::Vector3 vec(0.062, 0, -0.888);
+  ROS_INFO("trasf: %f %f %f ",vec[0], vec[1], vec[2]);
   tf2::Quaternion quat(0,0,0,1);
   tf2::Transform frame_transf;
   frame_transf.setOrigin(vec);

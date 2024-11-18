@@ -35,7 +35,7 @@ bool FilterCollisionPoses::check_collision_objects( ros::NodeHandle& node, const
     ROS_DEBUG("PLANNING SCENE OTTENUTA");
     std::vector<moveit_msgs::CollisionObject> objects = srv.response.scene.world.collision_objects;
     if (objects.size()==0){
-        ROS_ERROR("No collision objects in the scene - assuming all poses valid");
+        ROS_WARN("No collision objects in the scene - assuming all poses valid");
         return true;
     }
     for(int i=0; i<objects.size();i++){

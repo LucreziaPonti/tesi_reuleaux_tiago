@@ -43,8 +43,8 @@ int main(int argc, char **argv)
     	  ROS_INFO_STREAM("ADDITIONAL ARG USED = C/c- THE MAP IS ASSUMED TO BE A RM FROM MAP_CREATOR - REFERENCE FRAME ID SET TO torso_lift_link");
     	  ws.header.frame_id = "torso_lift_link";
       }else if (argv[2][0]=='g'||argv[2][0]=='G'){
-    	  ROS_INFO_STREAM("ADDITIONAL ARG USED = G/g- THE MAP IS ASSUMED TO BE A RM FROM MAP_GENERATION - REFERENCE FRAME ID SET TO arm_1_link");
-    	  ws.header.frame_id = "arm_1_link";
+    	  ROS_INFO_STREAM("ADDITIONAL ARG USED = G/g- THE MAP IS ASSUMED TO BE A RM FROM MAP_GENERATION not centered - REFERENCE FRAME ID SET TO base_footprint");
+    	  ws.header.frame_id = "base_footprint";
       }else{
     	  ROS_INFO_STREAM("ADDITIONAL ARG USED is not acceptable option (c=MAP_CREATOR / g=MAP_GENERATION) - REFERENCE FRAME ID SET TO base_link");
     	  ws.header.frame_id = "base_link";
