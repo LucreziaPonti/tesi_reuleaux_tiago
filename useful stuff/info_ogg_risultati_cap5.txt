@@ -1,0 +1,61 @@
+
+OGGETTI     POSIZIONI                   TASK        
+pringles    (0.8,-1.13,0.8)             point: [0.94, -1.02, 1.09, 92.66, 40.87, -139.08]
+sprite      (0.7,-1.25,0.8)             point: [0.68, -1.17, 1.11, 175.50, 65.89, -68.09]
+mug         (0.95,-1.26,0.8)            point: [0.97, -1.17, 1.11, -92.03, 71.11, -92.44]
+
+BP RESULTS for pick_one_each_DEF:
+WITH IKSolutionScore:
+    Optimal base pose[1]: Position: 0,940000, -0,660000, 1,100000, Orientation: 0,229743, -0,355713, -1,779937 - Score: 100,000000
+    Optimal base pose[2]: Position: 0,860000, -0,660000, 1,100000, Orientation: 0,229743, -0,355713, -1,779937 - Score: 100,000000
+    Optimal base pose[3]: Position: 0,460000, -0,660000, 1,100000, Orientation: 1,187637, -0,624478, -1,453582 - Score: 100,000000
+    Optimal base pose[4]: Position: 1,020000, -0,660000, 1,100000, Orientation: 0,392065, -0,156915, -2,398004 - Score: 100,000000
+    Optimal base pose[5]: Position: 1,500000, -1,060000, 1,100000, Orientation: -1,384508, -0,966526, -2,838241 - Score: 83,333328
+    Best pose for this solution: Position: 0,940000, -0,660000, 1,100000, Orientation: 0,229743, -0,355713, -1,779937
+WITH GraspReachabilityScore:
+    Optimal base pose[1]: Position: 0,940000, -0,660000, 1,100000, Orientation: 0,229743, -0,355713, -1,779937 - Score: 100,000000
+    Optimal base pose[2]: Position: 0,860000, -0,660000, 1,100000, Orientation: -2,372457, -0,802918, -2,067080 - Score: 66,666672
+    Optimal base pose[3]: Position: 0,460000, -0,660000, 1,100000, Orientation: -0,410426, -0,095551, 0,166396 - Score: 66,666672
+    Optimal base pose[4]: Position: 1,020000, -0,660000, 1,100000, Orientation: -0,035043, -0,419411, -1,102685 - Score: 83,333328
+    Optimal base pose[5]: Position: 1,500000, -1,060000, 1,100000, Orientation: -1,384508, -0,966526, -2,838241 - Score: 83,333328
+    Best pose for this solution: Position: 0,940000, -0,660000, 1,100000, Orientation: 0,229743, -0,355713, -1,779937
+
+!
+!stesse posizioni, orientamenti leggermente diversi (orientamenti di IKS sono pi+ vicini a quelli realizzabili e hanno score più alto)
+
+
+FINAL BP CON reuleaux_bp_to_nav e TORSO VALUE
+
+(torso value= 0.212000) (0.927128,-0.720649,0.000000) (0.000000,0.000000,-0.777052,0.629436) (con GraspReachabilityScore)
+
+
+!!!!!!! task con orientamenti diversi!!!!!!
+
+OGGETTI     POSIZIONI                   TASK        
+pringles    (0.8,-1.13,0.8)             point: [0.94, -1.02, 1.09, -87.85, 40.88, -139.08]
+sprite      (0.7,-1.25,0.8)             point: [0.68, -1.17, 1.11, 86.14, 65.89, -68.1]
+mug         (0.95,-1.26,0.8)            point: [0.97, -1.17, 1.11, -92.03, 71.11, -92.44]
+
+
+BP result w/IKSolutionScore for pick_one_each_DEFDEF (avg=86)
+    Optimal base pose[1]: Position: 0,620000, -0,660000, 1,100000, Orientation: 0,108904, -0,407264, -1,457888 - Score: 100,000000
+    Optimal base pose[2]: Position: 0,540000, -0,660000, 1,020000, Orientation: 2,156125, -0,151980, -1,733720 - Score: 100,000000
+    Optimal base pose[3]: Position: 0,780000, -0,420000, 0,940000, Orientation: -1,223827, -0,718805, -1,230133 - Score: 66,666672
+    Optimal base pose[4]: Position: 0,460000, -0,580000, 1,180000, Orientation: -0,165100, -0,388835, -0,774480 - Score: 83,333328
+    Optimal base pose[5]: Position: 1,100000, -0,500000, 1,020000, Orientation: -0,627277, -1,249186, -1,914690 - Score: 83,333328
+    Best pose for this solution: Position: 0,620000, -0,660000, 1,100000, Orientation: 0,108904, -0,407264, -1,457888
+
+BP result w/GraspReachabilityScore for pick_one_each_DEFDEF (avg=56)
+    Optimal base pose[1]: Position: 0,620000, -0,660000, 1,100000, Orientation: -2,646391, 0,540161, -2,414678 - Score: 66,666672
+    Optimal base pose[2]: Position: 0,540000, -0,660000, 1,020000, Orientation: -0,419940, 0,027491, 0,443718 - Score: 50,000000
+    Optimal base pose[3]: Position: 0,780000, -0,420000, 0,940000, Orientation: -0,627277, -1,249186, -1,914690 - Score: 50,000000
+    Optimal base pose[4]: Position: 0,460000, -0,580000, 1,180000, Orientation: -0,419940, 0,027491, 0,443718 - Score: 50,000000
+    Optimal base pose[5]: Position: 1,100000, -0,500000, 1,020000, Orientation: 0,330896, -0,264877, -2,108178 - Score: 66,666672
+    Best pose for this solution: Position: 0,620000, -0,660000, 1,100000, Orientation: -2,646391, 0,540161, -2,414678
+
+FINAL BP CON reuleaux_bp_to_nav e TORSO VALUE
+
+(torso value= 0.212000) (0.626985,-0.721605,0.000000) (0.000000,0.000000,-0.666082,0.745878) (con IKSolutionScore)
+
+(torso value= 0.212000) (0.573672,-0.701203,0.000000) (0.000000,0.000000,0.934673,-0.355508) (con GraspReachabilityScore)
+

@@ -339,6 +339,15 @@ double PlaceBase::calculateScoreForArmBase(std::vector<geometry_msgs::Pose> &gra
       num_of_solns +=nsolns;
     }
     float d = (float(num_of_solns)/float(grasp_poses.size()*8))*100;
+    //extra ros info for screen --- togliere 
+        tf2::Quaternion quat(base_poses[i].orientation.x, base_poses[i].orientation.y,
+                             base_poses[i].orientation.z, base_poses[i].orientation.w);
+        tf2::Matrix3x3 m(quat);
+
+        double roll, pitch, yaw;
+        m.getRPY(roll, pitch, yaw);
+        ROS_INFO("Optimal base pose[%d]: Position: %f, %f, %f, Orientation: %f, %f, %f - Score: %f", i + 1,
+                 base_poses[i].position.x, base_poses[i].position.y, base_poses[i].position.z, roll,pitch, yaw,d);
     if(d>max_score)
     {
       max_score = d;
@@ -347,6 +356,15 @@ double PlaceBase::calculateScoreForArmBase(std::vector<geometry_msgs::Pose> &gra
     total_score +=d;
   }
   best_pose_ = best_pose;
+  //extra ros info for screen --- togliere 
+        tf2::Quaternion quat(best_pose_.orientation.x, best_pose_.orientation.y,
+                             best_pose_.orientation.z, best_pose_.orientation.w);
+        tf2::Matrix3x3 m(quat);
+
+        double roll, pitch, yaw;
+        m.getRPY(roll, pitch, yaw);
+        ROS_INFO("Best pose for this solution: Position: %f, %f, %f, Orientation: %f, %f, %f",
+                 best_pose_.position.x, best_pose_.position.y, best_pose_.position.z, roll,pitch, yaw);
   double score = double(total_score/float(base_poses.size()));
   return score;
 }
