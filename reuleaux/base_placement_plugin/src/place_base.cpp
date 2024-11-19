@@ -346,7 +346,7 @@ double PlaceBase::calculateScoreForArmBase(std::vector<geometry_msgs::Pose> &gra
 
         double roll, pitch, yaw;
         m.getRPY(roll, pitch, yaw);
-        ROS_INFO("Optimal base pose[%d]: Position: %f, %f, %f, Orientation: %f, %f, %f - Score: %f", i + 1,
+        ROS_INFO("Optimal base pose[%d]: (%.2f, %.2f, %.2f) (%.2f, %.2f, %.2f) - Score: %.2f", i + 1,
                  base_poses[i].position.x, base_poses[i].position.y, base_poses[i].position.z, roll,pitch, yaw,d);
     if(d>max_score)
     {
@@ -363,9 +363,10 @@ double PlaceBase::calculateScoreForArmBase(std::vector<geometry_msgs::Pose> &gra
 
         double roll, pitch, yaw;
         m.getRPY(roll, pitch, yaw);
-        ROS_INFO("Best pose for this solution: Position: %f, %f, %f, Orientation: %f, %f, %f",
+        ROS_INFO("Best pose for this solution: (%.2f, %.2f, %.2f) (%.2f, %.2f, %.2f)",
                  best_pose_.position.x, best_pose_.position.y, best_pose_.position.z, roll,pitch, yaw);
   double score = double(total_score/float(base_poses.size()));
+        ROS_INFO("Score average = %.2f",score);
   return score;
 }
 
