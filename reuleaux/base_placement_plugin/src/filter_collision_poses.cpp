@@ -51,8 +51,8 @@ bool FilterCollisionPoses::check_collision_objects( ros::NodeHandle& node, const
             //store the values of dimensions depending on the primitive type - here we only used box and cylinder
             if(objects[i].primitives[0].type==1){ //BOX
                 //ROS_DEBUG("dimensions: %f , %f , %f", objects[i].primitives[0].dimensions[0],objects[i].primitives[0].dimensions[1],objects[i].primitives[0].dimensions[2]); 
-                dX=objects[i].primitives[0].dimensions[0]/2+0.18;
-                dY=objects[i].primitives[0].dimensions[1]/2+0.2;
+                dX=objects[i].primitives[0].dimensions[0]/2+0.25;
+                dY=objects[i].primitives[0].dimensions[1]/2+0.25;
                 dZ=objects[i].primitives[0].dimensions[2]/2+0.15;
                 // the +0.15 is mainly for the tables 
 
@@ -66,7 +66,7 @@ bool FilterCollisionPoses::check_collision_objects( ros::NodeHandle& node, const
 
             //PERFORM THE FILTERING
             if(checkZ){
-                if((x>(co_x-(dX+0.06)))&&(x<(co_x+(dX+0.06)))&&(y>(co_y-(dY+0.06)))&&(y<(co_y+(dY+0.06)))){//inside the bounds of the object -- not acceptable pose
+                if((x>(co_x-(dX+0.08)))&&(x<(co_x+(dX+0.08)))&&(y>(co_y-(dY+0.065)))&&(y<(co_y+(dY+0.065)))){//inside the bounds of the object -- not acceptable pose
                     ROS_DEBUG("NOT acceptable pose - %s ",objects[i].id.c_str());
                     return false;
                 }

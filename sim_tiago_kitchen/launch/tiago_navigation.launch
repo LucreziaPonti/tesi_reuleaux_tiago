@@ -80,7 +80,7 @@
   </group>
      <group unless="$(arg advanced_navigation)">
       <node name="rviz" pkg="rviz" type="rviz" if="$(arg rviz)"
-            args="-d $(find sim_tiago_kitchen)/rviz/navigation.rviz"/>
+            args="-d $(find sim_tiago_kitchen)/rviz/navigation_video.rviz"/>
             <!--args="-d $(find tiago_2dnav)/config/rviz/navigation$(arg sim_sufix).rviz"-->
     </group>
   </group>

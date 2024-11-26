@@ -10,12 +10,23 @@ to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 <sdf version="1.6">
   <model name="blue_mug">
     <link name="link_0">
+      <inertial>
+          <mass>0.1</mass>
+          <inertia>
+            <ixx>0.000000</ixx>
+            <ixy>0.000000</ixy>
+            <ixz>0.000000</ixz>
+            <iyy>0.000000</iyy>
+            <iyz>0.000000</iyz>
+            <izz>0.000000</izz>
+          </inertia>
+        </inertial>
       <visual name="visual">
       <pose>0.02 0.01 0 0 0 0</pose>
         <geometry>
           <mesh>
             <uri>meshes/model.obj</uri>
-            <scale> 0.5 0.5 1 </scale>
+            <scale> 0.45 0.5 1 </scale>
           </mesh>
         </geometry>
       </visual>
@@ -24,7 +35,7 @@ to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
         <geometry>
           <mesh>
             <uri>meshes/model.obj</uri>
-            <scale> 0.5 0.5 1 </scale>
+            <scale> 0.4 0.5 1 </scale>
           </mesh>
         </geometry>
       </collision>

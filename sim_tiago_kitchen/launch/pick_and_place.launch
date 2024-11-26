@@ -4,7 +4,7 @@
   <!-- Load definition of pregrasp motion into play_motion namespace -->
   <rosparam command="load" file="$(find sim_tiago_kitchen)/config/pick_motions.yaml" /> 
 
-  <node name="tiago_pick_and_place" pkg="sim_tiago_kitchen" type="pick_placetiago_pick_and_place_server" output="screen"/>
+  <node name="tiago_pick_and_place" pkg="sim_tiago_kitchen" type="tiago_pick_and_place" output="screen"/>
 </launch>
 
 

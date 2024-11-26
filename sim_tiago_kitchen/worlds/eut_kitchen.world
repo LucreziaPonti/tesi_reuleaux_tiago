@@ -68,9 +68,9 @@
     </light>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>-0.53008 -1.29179 2.08376 0 0.979797 1.452001</pose>
+        <pose>4.4545 -0.0979 2.0080 0 0.29979 3.1280</pose>
         <view_controller>ortho</view_controller>
-        <projection_type>orthographic</projection_type>
+        <projection_type>perspective</projection_type>
       </camera>
     </gui>
     <gravity>0 0 -9.8</gravity>
@@ -132,10 +132,10 @@
           </surface>
         </collision>
         <collision name='base_link_collision_2'>
-          <pose>0 0 0.51 1.5714 -0 0</pose>
+          <pose>0 0 0.5 1.5714 -0 0</pose>
           <geometry>
             <mesh>
-              <scale>100 50 55</scale>
+              <scale>100 50 65</scale>
               <uri>file://sink/kitchen_only_kitchen.obj</uri>
             </mesh>
           </geometry>
@@ -687,7 +687,7 @@
             <ambient>1 1 1 1</ambient>
           </material>
           <meta>
-            <layer>0</layer>
+            <layer>1</layer>
           </meta>
         </visual>
         <pose>2.85303 -0.015533 0 0 -0 1.5708</pose>

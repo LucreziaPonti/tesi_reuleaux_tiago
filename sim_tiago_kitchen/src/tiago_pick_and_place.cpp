@@ -38,20 +38,23 @@ geometry_msgs::Pose taskToPose(float x,float y,float z,float Rx,float Ry,float R
 }
 
 void store_tasks(){ //salvo le task negli array globali, un oggetto per volta, copiando incollando le task dai .yaml di reuleaux (si è brutto ma efficace)
-    pick_pringles.push_back(taskToPose(0.5767598152160645, -1.161960124969482, 1.0158371925354, 22.92856404153541, 26.54230126434272, 2.562731003109279));
-    pick_pringles.push_back(taskToPose(0.5767598152160645, -1.161960124969482, 1.0158371925354, 22.92856404153541, 26.54230126434272, 2.562731003109279));
-    place_pringles.push_back(taskToPose(1.106438279151917, 1.347545027732849, 1.315836548805237, 68.910, 65.168, 68.134));
-    place_pringles.push_back(taskToPose(1.079, 1.248, 1.369, 90, 0, 92.884));
+    pick_pringles.push_back(taskToPose(0.7361922860145569, -1.009443998336792, 1.059582829475403, 91.74079828492033, 52.0486021339228, -59.39690853044742));
+    pick_pringles.push_back(taskToPose(0.8129568099975586, -0.9642423391342163, 1.117740154266357, -90.81113195667926, 47.96383643831138, -92.96487432739953));
+    pick_pringles.push_back(taskToPose(0.8818308115005493, -0.9185670018196106, 0.8914331793785095, -89.98609685467324, -9.64607889196644, -109.33492761268));
+    pick_pringles.push_back(taskToPose(0.9530173540115356, -1.009952902793884, 1.015895247459412, -90.16130400107706, 36.68970817033399, -140.6712008693245));
+    place_pringles.push_back(taskToPose(1.08, 1.21, 1.29, 100.154, 29.603, 102.262));
 
-    pick_mug.push_back(taskToPose(0.5767598152160645, -1.161960124969482, 1.0158371925354, 22.92856404153541, 26.54230126434272, 2.562731003109279));
-    pick_mug.push_back(taskToPose(0.5767598152160645, -1.161960124969482, 1.0158371925354, 22.92856404153541, 26.54230126434272, 2.562731003109279));
-    place_mug.push_back(taskToPose(-0.1394776403903961, 1.227737069129944, 1.238265037536621, 28.36199410416118, 67.65071302577509, 113.31308863419));
+    pick_mug.push_back(taskToPose(0.93, -1.23337733745575, 1.104748129844666, 65.47676703847849, 77.97409489539824, -25.87356871191176));
+    pick_mug.push_back(taskToPose(0.9712081551551819, -1.065636277198792, 1.031280279159546, 89.11282208549174, 42.88137758318867, -90.23342102152429));
+    pick_mug.push_back(taskToPose(0.982599675655365, -1.248825669288635, 1.118794441223145, -179.9999374146811, 89.71621217147975, -179.999948952354));
+    pick_mug.push_back(taskToPose(0.9774245023727417, -1.168664693832397, 1.105125427246094, 0.7884831018062345, 70.26118166307035, -91.06168318787047));
+    place_mug.push_back(taskToPose(0.01142683438956738, 1.198228001594543, 1.242118000984192, 86.35661748444021, 36.71599042359821, 94.65331964551396));
 
     pick_sprite.push_back(taskToPose(0.665, -1.203, 1.179, 88.477, 76.522, -48.339));
     pick_sprite.push_back(taskToPose(0.714, -1.244, 1.173, 179.999, 87.181, 179.999));
     pick_sprite.push_back(taskToPose(0.706, -1.0350, 0.998, -93.018, 20.973, -91.081));
     pick_sprite.push_back(taskToPose(0.596, -1.087, 0.983, -94.204, 21.462, -55.717));
-    place_sprite.push_back(taskToPose(1.009, -1.117, 1.154, -16.404, 62.929, -72.434));   
+    place_sprite.push_back(taskToPose(0.9824782609939575, -1.118773221969604, 1.153997421264648, -16.40400594651022, 62.92900499132745, -72.43401083339511));   
 }
 
 void move_base(bool back){
@@ -119,7 +122,7 @@ bool move_gripper(bool close){
 
 }
 
-geometry_msgs::Pose move_to_task(std::vector<geometry_msgs::Pose> task_poses){
+geometry_msgs::Pose move_to_task(std::vector<geometry_msgs::Pose> task_poses,bool pick){
     geometry_msgs::Pose ret_pose;
     bool success;
     moveit::planning_interface::MoveGroupInterface group_arm("arm");
@@ -129,6 +132,10 @@ geometry_msgs::Pose move_to_task(std::vector<geometry_msgs::Pose> task_poses){
         geometry_msgs::PoseStamped goal_pose;
         goal_pose.header.frame_id = "map";
         goal_pose.pose=task_poses[i];
+        if (pick){
+            goal_pose.pose.position.z+=0.05;
+            ROS_INFO("DEBUG------ +0.05");
+        }
         //choose your preferred planner
         group_arm.setPlannerId("SBLkConfigDefault");
         group_arm.setPoseReferenceFrame("map");
@@ -150,22 +157,47 @@ geometry_msgs::Pose move_to_task(std::vector<geometry_msgs::Pose> task_poses){
     }
 
     ROS_INFO_STREAM("Plan found in " << my_plan.planning_time_ << " seconds");
-    // Execute the plan
+    // Execute plan
+    ROS_INFO("DEBUG---- move to pose above task");
     ros::Time start = ros::Time::now();
     moveit::planning_interface::MoveItErrorCode e = group_arm.move();
     if (!bool(e)){
         ROS_ERROR("Error executing plan");
     }
+    if(pick){
+        geometry_msgs::PoseStamped goal_pose;
+        goal_pose.header.frame_id = "map";
+        goal_pose.pose=ret_pose;
+        //choose your preferred planner
+        group_arm.setPlannerId("SBLkConfigDefault");
+        group_arm.setPoseReferenceFrame("map");
+        group_arm.setPoseTarget(goal_pose);
+        group_arm.setStartStateToCurrentState();
+        group_arm.setMaxVelocityScalingFactor(1.0);
+        //set maximum time to find a plan
+        group_arm.setPlanningTime(10.0);
+        success = bool(group_arm.plan(my_plan));
+        if(success){
+            ROS_INFO("debug --- plan per raggiungere task trovato - eseguo");
+            ros::Time start = ros::Time::now();
+            moveit::planning_interface::MoveItErrorCode e = group_arm.move();
+            if (!bool(e)){
+                ROS_ERROR("Error executing plan");
+            }
+        }else{
+            ROS_ERROR("failed to reach task");
+        }
+    }
+
     return ret_pose;
 }
 
 bool retreat_from_task(geometry_msgs::Pose pose){
-
-    ROS_INFO("attempting plan retreat");
+    ROS_INFO("DEBUG---- PLANNING POSE ABOVE TASK");
     geometry_msgs::PoseStamped goal_pose;
     goal_pose.header.frame_id = "map";
     goal_pose.pose=pose;
-    goal_pose.pose.position.z+=0.05;
+    goal_pose.pose.position.z+=0.1;
 
     moveit::planning_interface::MoveGroupInterface group_arm("arm");
     //choose your preferred planner
@@ -181,11 +213,12 @@ bool retreat_from_task(geometry_msgs::Pose pose){
     bool success = bool(group_arm.plan(my_plan));
 
     if ( !success ){
-        ROS_WARN("No plan found - attempting next pose");
+        ROS_WARN("No plan found");
     }
 
     ROS_INFO_STREAM("Plan found in " << my_plan.planning_time_ << " seconds");
     // Execute the plan
+    ROS_INFO("DEBUG----- EXECUTING PLAN");
     ros::Time start = ros::Time::now();
     moveit::planning_interface::MoveItErrorCode e = group_arm.move();
     if (!bool(e)){
@@ -210,21 +243,22 @@ int execute_task(std::vector<geometry_msgs::Pose> tasks, bool pick, bool do_preg
         move_gripper(false); //open gripper
     }
     geometry_msgs::Pose empty_pose;
-    geometry_msgs::Pose task_done=move_to_task(tasks);
+    geometry_msgs::Pose task_done=move_to_task(tasks,pick);
     if(task_done==empty_pose){
         return 99999; //error_code=FAILURE
     }
    
     ROS_INFO("closing gripper");
     move_gripper(pick); //pick=true=close -- pick=false=open
-
+    ROS_INFO("attempting retreat");
     retreat_from_task(task_done);
-
-    move_base(true); //move back - away from table
-
-    if (!do_motion("hold_object_home")){
-        return -2; //error_code=INVALID_MOTION_PLAN
+    if(do_pregrasp){
+        move_base(true); //move back - away from table
+        if (!do_motion("hold_object_home")){
+            return -2; //error_code=INVALID_MOTION_PLAN
+        }
     }
+    
     return 1; //all done ok - error_code=SUCCESS
 }
 

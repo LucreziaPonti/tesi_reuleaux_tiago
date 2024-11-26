@@ -397,40 +397,23 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.8916
+      Distance: 4.35859
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0
-        Y: 0
-        Z: 0
+        X: -0.23032
+        Y: 0.0921688
+        Z: 0.501522
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.440398
+      Pitch: 0.510398
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 6.1386
-    Saved: 
-      Class: rviz/Orbit
-      Distance: 3.8916
-      Enable Stereo Rendering:
-        Stereo Eye Separation: 0.06
-        Stereo Focal Distance: 1
-        Swap Stereo Eyes: false
-        Value: false
-      Focal Point:
-        X: 0,885659
-        Y: -0,130285
-        Z: -0,161416
-      Name: Foto
-      Near Clip Distance: 0.01
-      Pitch: 0,815398
-      Target Frame: map
-      Value: Orbit (rviz)
-      Yaw: 4,70359
+      Yaw: 0
+    Saved: ~
 Window Geometry:
   Base Placement Plug-in:
     collapsed: false
