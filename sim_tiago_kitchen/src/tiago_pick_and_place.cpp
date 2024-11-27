@@ -38,8 +38,8 @@ geometry_msgs::Pose taskToPose(float x,float y,float z,float Rx,float Ry,float R
 }
 
 void store_tasks(){ //salvo le task negli array globali, un oggetto per volta, copiando incollando le task dai .yaml di reuleaux (si è brutto ma efficace)
-    pick_pringles.push_back(taskToPose(0.7361922860145569, -1.009443998336792, 1.059582829475403, 91.74079828492033, 52.0486021339228, -59.39690853044742));
     pick_pringles.push_back(taskToPose(0.8129568099975586, -0.9642423391342163, 1.117740154266357, -90.81113195667926, 47.96383643831138, -92.96487432739953));
+    pick_pringles.push_back(taskToPose(0.7361922860145569, -1.009443998336792, 1.059582829475403, 91.74079828492033, 52.0486021339228, -59.39690853044742));
     pick_pringles.push_back(taskToPose(0.8818308115005493, -0.9185670018196106, 0.8914331793785095, -89.98609685467324, -9.64607889196644, -109.33492761268));
     pick_pringles.push_back(taskToPose(0.9530173540115356, -1.009952902793884, 1.015895247459412, -90.16130400107706, 36.68970817033399, -140.6712008693245));
     place_pringles.push_back(taskToPose(1.08, 1.21, 1.29, 100.154, 29.603, 102.262));
@@ -134,7 +134,7 @@ geometry_msgs::Pose move_to_task(std::vector<geometry_msgs::Pose> task_poses,boo
         goal_pose.pose=task_poses[i];
         if (pick){
             goal_pose.pose.position.z+=0.05;
-            ROS_INFO("DEBUG------ +0.05");
+            ROS_DEBUG("DEBUG------ +0.05");
         }
         //choose your preferred planner
         group_arm.setPlannerId("SBLkConfigDefault");
@@ -250,8 +250,8 @@ int execute_task(std::vector<geometry_msgs::Pose> tasks, bool pick, bool do_preg
    
     ROS_INFO("closing gripper");
     move_gripper(pick); //pick=true=close -- pick=false=open
-    ROS_INFO("attempting retreat");
-    retreat_from_task(task_done);
+    //ROS_INFO("attempting retreat");
+    //retreat_from_task(task_done);
     if(do_pregrasp){
         move_base(true); //move back - away from table
         if (!do_motion("hold_object_home")){
