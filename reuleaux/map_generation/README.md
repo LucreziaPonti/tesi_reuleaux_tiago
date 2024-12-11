@@ -46,56 +46,37 @@ catkin build --cmake-args -DCMAKE_BUILD_TYPE=Release
 A launch file is included that can be used with [the Panda arm demo](https://ros-planning.github.io/moveit_tutorials/doc/quickstart_in_rviz/quickstart_in_rviz_tutorial.html) that is bundled with MoveIt!
 
 ### Create a Reachability Map
-Check the settings in [the launch file](https://github.com/MShields1986/reuleaux_moveit/blob/noetic-devel/map_generation/launch/panda_demo.launch) and then run...
+Check the settings in [the launch file](https://github.com/MShields1986/reuleaux_moveit/blob/noetic-devel/map_generation/launch/generate_map.launch) and then run...
 ```bash
-roslaunch map_generation panda_demo.launch
+roslaunch map_generation generate_map.launch
 ```
 
 Note that MoveIt! will throw a `Found empty JointState message` error for every pose solution (which is a lot), this is a [known issue](https://github.com/ros-planning/moveit/issues/659) and doesn't effect the generation of reachability maps.
 
-### Visualise an Existing Reachability Map
-To load an existing reachability map...
-```bash
-roslaunch map_generation panda_demo.launch create_map:=false
-```
-
-Note that the map to be loaded is currently not parameterised, so needs to be changed in [the launch file](https://github.com/MShields1986/reuleaux_moveit/blob/noetic-devel/map_generation/launch/panda_demo.launch) itself. The default is to load `map_generation/maps/panda_arm_0.15_reachability.h5`
-
-![col](img/panda_reach_demo.png)
+!!!! as of now the centering function within the map_generation_node has issues and does not work properly: 
+set the "do_centering" arg to false and use the fix_RM_reference_frame node in map_creator to "manually" fix the reference frame of the RM **BEFORE** creating the IRM - make sure to adjust the transformation that needs to be done within the node  !!!!
 
 ### Inverse Reachability Maps
-Inverse reachability maps can be created using [Reuleaux](http://wiki.ros.org/reuleaux#Inverse_Reachability_Map).
+Inverse reachability maps can be created using the map_creator package commands, as such:
 ```bash
-# The command takes the form of...
-# rosrun map_creator create_inverse_reachability_map path_to/input_reachability_map.h5 path_to/output_inverse_map.h5
-
-# For example
 roscd map_generation/maps/
 
-rosrun map_creator create_inverse_reachability_map panda_arm_0.15_reachability.h5 ../../../reuleaux_moveit/map_generation/maps/panda_arm_0.15_inverse_reachability.h5
+rosrun map_creator create_inverse_reachability_map *RM_file_name*.h5 *optional_desired_IRM_filename*.h5
 ```
 
-### Visualise an Existing Inverse Reachability Map
-To load an existing inverse reachability map...
+!! the maps are by default saved in map_creator/maps folder - I moved them manually to map_generation/maps for better organization
+
+### Visualise an Existing Reachability Map
+Use the map_creator package commands, as such:
 ```bash
-roslaunch map_generation panda_demo.launch load_manipulator:=false create_map:=false
+roscd map_generation/maps/
+
+rosrun map_creator load_reachability_map *map_file_name*.h5 *optional arg*
 ```
+The optional arg allows to change the reference frame in which the map will be loaded:
+- no optional arg: frame= "arm_tool_link" - use for IRM
+- 'c' : frame= "torso_lift_link"  - for RM created with map_creator and map_generation AFTER CENTERING 
+- 'g' : frame= "base_footprint" - for RM with map_generation NOT CENTERED (!! maps have to be centered before creating IRM)
+- any other value: frame= "base_link" - default frame originally used by reuleaux
+!! These frames are ok for TIAGo
 
-Note that the map to be loaded is currently not parameterised, so needs to be changed in [the launch file](https://github.com/MShields1986/reuleaux_moveit/blob/noetic-devel/map_generation/launch/panda_demo.launch) itself. The default is to load `map_generation/maps/panda_arm_0.15_inverse_reachability.h5`
-
-![col](img/panda_inverse_reach_demo.png)
-
-### Use an Inverse Reachability Map for Finding Base Positions
-This is done via the Reuleaux base_placement_plugin for RViz, which can be launched using...
-```bash
-roslaunch map_generation panda_demo.launch create_map:=false base_placement:=true
-```
-
-Then follow the [Reuleaux Wiki](http://wiki.ros.org/reuleaux) steps for loading the inverse reachability map etc.
-
-![col](img/panda_base_demo.png)
-
----
-
-## Bugs and Feature Requests
-Please report bugs and request features using the [issue tracker](https://github.com/jontromanab/reuleaux_moveit/issues).

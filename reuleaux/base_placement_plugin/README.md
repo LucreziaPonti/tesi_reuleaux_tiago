@@ -34,11 +34,18 @@ it will save an invese reachability map in the map_creator/Inv_map folder
 After loading the inverse reachability map set the desired parameters. There are two parameters. Number of desired base locations and number of high scoring spheres from where the poses will be collected.
 
 Set the desired output visualization method.(The robot model visualization is still in development. Coming Soon)
-```
 When everything is set up, press the Find Base button. It will show the base locations.
 
 If you want to see the union map, press the show union map button.
 
+## Launch files
+To use the plugin "indipendently" from the simulation, without gazebo: 
+```
+roslaunch base_placement_plugin base_placement.launch
+```
 
-
+With the simulation already started use:
+```
+roslaunch base_placement_plugin rviz_bp.launch
+```
 

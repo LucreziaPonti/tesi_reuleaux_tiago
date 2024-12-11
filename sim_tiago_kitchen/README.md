@@ -1,28 +1,6 @@
-# **IntelliMan - Use Case 2 Scenario - Gazebo Models**
+# **sim_tiago_kitchen**
 
-This project is devoted to the simulated scenario in Gazebo of the Kitchen available at Eurecat (EUT), developed for the Use Case 2 within the Intelliman project. The examples given consider the use of TIAGo robotic platform. Right now it has been tested with **ROS Noetic** (**Ubuntu 20.04**).
-
-The project is structured as follows:
-
-- Object meshes are located in the *meshes* folders.
-
-- The map of the kitchen is located in the *maps* folder.
-
-- Inside the fodler *urdfs* we can find the urdf of the final sink furniture and the corresponfing *sdf* for their use in Gazebo.
-
-- Worlds are located in the *worlds* folder.
-
-- Inside *utils* you can find a file with all the instructions to run the simulation without any explanation and a folder for the use of docker compose or devcontainer (VSCode) to start the docker container.
-
-
-### Installation
-
-The project has to be installed within an existing docker image. For the TIAGo case, using the exitsing noetic image:
-```
-docker pull palroboticssl/tiago_tutorials:noetic
-```
-A docker container has to be started. This could be done using the available example in [utils](https://dei-gitlab.dei.unibo.it/asanmiguel/intelliman-uc2-gazebo-models/-/blob/main/utils/docker_compose_devcontainer/docker-compose.yaml), where **the path to package has to be modified to fit your configuration**. This container considers CPU usage, for GPU usage (Nvidia) uncomment `runtime:nvidia` and `- NVIDIA_VISIBLE_DEVICES=all`. 
-
+This package contains all the launch and config files used for the final simulation for the thesis. 
 
 ### Simulated scenario
 
@@ -49,8 +27,43 @@ To start the simulation for NAVIGATION, TESTING, or DEVELOPMENT you need to run 
 ```
 roslaunch sim_tiago_kitchen tiago_navigation.launch map:=/tiago_public_ws/src/sim_tiago_kitchen/maps/eut_kitchen public_sim:=true
 ```
-
-It is mandatory to define the public sim arguement.
-
 Additional arguments can be used (see launch file for more details)
 
+## Full simulation launch
+
+- Launch the simulation, with gazebo object and grasp plugins, navigation and control:
+    ```
+    roslaunch sim_tiago_kitchen tiago_sull_sim.launch
+    ```
+
+- After everything is fully loaded, create the planning scene in rviz (using the fake object recongition): 
+    ```
+    roslaunch sim_tiago_kitchen planning_scene_kitchen.launch
+    ```
+
+- To use the reuleaux base placement plugin (and reuleaux_bp_to_nav): 
+    ```
+    roslaunch base_placement_plugin rviz_bp.launch
+    ```
+    To move to the obtained results (for PCA,IKS,GRS methods) : 
+    ```
+    rosservice call reuleaux_bp_to_nav/move_to_bp_arm
+    ```
+    To move to the obtained results (for VRM,UI methods) : 
+    ```
+    rosservice call reuleaux_bp_to_nav/move_to_bp_robot
+    ```
+
+- To execute the pick and place: 
+    !! as of now the tasks have to be manually inserted in the tiago_pick_and_place.cpp node by copy-paste (before starting, copy the tasks form the .yaml file in saved tasks into the node, then build)
+    ```
+    roslaunch sim_tiago_kitchen tiago_pick_and_place.launch
+    ```
+    to actually execute a pick : 
+    ```
+    rosservice call /tiago_pick_and_place/pick *object name* *do_pregrasp: true/false*
+    ```
+    to actually execute a place : 
+    ```
+    rosservice call /tiago_pick_and_place/place *object name* *do_pregrasp: true/false*
+    ```
